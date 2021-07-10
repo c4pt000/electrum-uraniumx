@@ -2,6 +2,9 @@
 for server https://github.com/c4pt000/electrumx-dogecoin-server-radiocoin-4.1.4
 
 
+for dogecoin-electrum
+https://github.com/c4pt000/electrum-wallet-doge
+
 <br>
 <br>
 <br>
