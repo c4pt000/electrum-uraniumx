@@ -1105,13 +1105,16 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
             _('Expired requests have to be deleted manually from your list, in order to free the corresponding Radiocoin addresses.'),
             _('The Radiocoin address never expires and will always be part of this electrum-RADC wallet.'),
         ])
-#        grid.addWidget(HelpLabel(_('Expires after'), msg), 2, 0)
-#        grid.addWidget(self.expires_combo, 2, 1)
+
+        grid.addWidget(HelpLabel(_(''), msg), 2, 0)
+#, msg), 2, 0)
+        grid.addWidget(self.expires_combo, 2, 1)
         self.expires_label = QLineEdit('')
-        self.expires_label.setReadOnly(1)
-        self.expires_label.setFocusPolicy(Qt.NoFocus)
+#        self.expires_label.setReadOnly(1)
+#        self.expires_label.setFocusPolicy(Qt.NoFocus)
         self.expires_label.hide()
- #       grid.addWidget(self.expires_label, 2, 1)
+        grid.addWidget(self.expires_label, 2, 1)
+
 
         self.clear_invoice_button = QPushButton(_('Clear'))
         self.clear_invoice_button.clicked.connect(self.clear_receive_tab)
@@ -1277,7 +1280,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         self.receive_message_e.setText('')
         self.receive_amount_e.setAmount(None)
         self.expires_label.hide()
-        self.expires_combo.show()
+        self.expires_combo.hide()
         self.request_list.clearSelection()
 
     def toggle_qr_window(self):
