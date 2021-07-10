@@ -1,4 +1,8 @@
-# electrum-radiocoin-4.1.4-current
+# electrum-radiocoin-4.0.1
+
+* based off of electrum-nmc
+
+
 # for server https://github.com/c4pt000/electrumx-dogecoin-server-radiocoin-4.1.4
 # for DOGECOIN https://github.com/c4pt000/electrum-dogecoin
 
