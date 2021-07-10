@@ -1,6 +1,6 @@
 # electrum-radiocoin-4.1.4-current
-for server https://github.com/c4pt000/electrumx-dogecoin-server-radiocoin-4.1.4
-
+# for server https://github.com/c4pt000/electrumx-dogecoin-server-radiocoin-4.1.4
+# for DOGECOIN https://github.com/c4pt000/electrum-dogecoin
 
 for dogecoin-electrum
 https://github.com/c4pt000/electrum-wallet-doge
