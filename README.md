@@ -42,15 +42,3 @@ SAVE YOUR WALLET SEED TO RESTORE A BACKUP OF YOUR WALLET
 ![s1](https://github.com/c4pt000/radiocoin/releases/download/electrum-wallet/electrum--radiocoin-sign-broadcast.png)
 ![s1](https://github.com/c4pt000/radiocoin/releases/download/electrum-wallet/electrum-4.1.4-radiocoin-send-amount.png)
 ![s1](https://github.com/c4pt000/radiocoin/releases/download/electrum-wallet/electrum-finalize-transaction.png)
-```
-wget https://raw.githubusercontent.com/c4pt000/Docker-fedora-34-nested-docker-OpenCore-ARM64/main/xhost-gen
-chmod +x xhost-gen
-#check if your system supports xhost as root
-xhost
-#if not install xhost
-./xhost-gen
-#as root 
-echo "xhost SI:localuser:root" >> /root/.bashrc
-source /root/.bashrc
-
-```
