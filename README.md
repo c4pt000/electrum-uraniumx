@@ -1,5 +1,7 @@
 # electrum-radiocoin-4.0.1 
 
+to do, soon implent paper wallet directly into electrum for both wallet clients
+
 * based off of electrum-nmc
 
 
