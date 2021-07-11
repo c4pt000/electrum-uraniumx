@@ -1,4 +1,4 @@
-# electrum-radiocoin-4.0.1 for electrum-dogecoin https://github.com/c4pt000/electrum-dogecoin
+# electrum-radiocoin-4.0.1 
 
 * based off of electrum-nmc
 
