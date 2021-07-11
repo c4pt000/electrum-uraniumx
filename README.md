@@ -49,9 +49,7 @@ SAVE YOUR WALLET SEED TO RESTORE A BACKUP OF YOUR WALLET
 requires docker (for building templates)
 contrib builder build-wine for win32 installer
 ```
-cd contrib/build-wine
-docker -t electrum-nmc-wine-builder-img .
-cd ../../
+docker build -t electrum-nmc-wine-builder-img contrib/build-wine
 
 docker run -it --name electrum-wine-builder-cont -v $PWD:/opt/wine64/drive_c/electrum-nmc --rm --workdir /opt/wine64/drive_c/electrum-nmc/contrib/build-wine  electrum-nmc-wine-builder-img  ./build.sh
 
