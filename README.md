@@ -22,25 +22,12 @@ https://github.com/c4pt000/electrum-radiocoin/releases/tag/win10
 fedora 34
 <br>
 will not send a TX while running from docker use the installer natively instead 
-```
-docker run -it --net host -d -e "DISPLAY=${DISPLAY:-:0.0}" -v /tmp/.X11-unix:/tmp/.X11-unix fedora:34
-
-# (fedora 34)
-
-cd /opt
- yum install git nano wget -y
- git clone https://github.com/c4pt000/electrum-radiocoin
- cd electrum-radiocoin
- sh install-radiocoin-electrum.sh 
-```
-
- * todo hardcode  a minimum of 1.00 RADC fee to send (with electrum)
 
 # dont use with docker
 * wont send a transaction while running from the docker guest (even with --net host)
 
 * 07-06-2021
-# PAPER wallet import works with radiocoin-electrum-4.1.4
+# PAPER wallet import works with radiocoin-electrum-4.0.1
 ![s1](https://raw.githubusercontent.com/c4pt000/radiocoin/master/just-the-right-QR-code-ignore-the-left.png)
 # leave random deposit address and just import the QR on the right side of the crypto-currency bill (with the camera logo icon) 
 * requires "pip3 install python-zbar" ? and uvcvideo and web cam support
