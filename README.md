@@ -1,5 +1,11 @@
 # electrum-radiocoin-4.0.1 
 
+
+
+https://github.com/c4pt000/radiox-exchange
+
+![s1](https://raw.githubusercontent.com/c4pt000/radiox-exchange/main/radiox-current.png)
+
 to do, soon implent paper wallet directly into electrum for both wallet clients
 
 * based off of electrum-nmc
