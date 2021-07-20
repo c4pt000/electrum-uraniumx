@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Electrum-Radiocoin</string>
+    <string name="presplash_color">\#000000</string>
+    <string name="private_version">544dab8b2bc582d610d77a856b65287c6ee90ca0</string>
+    <string name="urlScheme">kivy</string>
+</resources>

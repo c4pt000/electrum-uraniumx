@@ -1,0 +1,13 @@
+../aiohttp_socks/__init__.py
+../aiohttp_socks/__pycache__/__init__.cpython-39.pyc
+../aiohttp_socks/__pycache__/_deprecated.cpython-39.pyc
+../aiohttp_socks/__pycache__/connector.cpython-39.pyc
+../aiohttp_socks/__pycache__/utils.cpython-39.pyc
+../aiohttp_socks/_deprecated.py
+../aiohttp_socks/connector.py
+../aiohttp_socks/utils.py
+PKG-INFO
+SOURCES.txt
+dependency_links.txt
+requires.txt
+top_level.txt

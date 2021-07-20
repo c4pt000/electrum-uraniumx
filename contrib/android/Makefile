@@ -11,7 +11,7 @@ prepare:
 	# running pre build setup
 	@cp buildozer.spec ../../buildozer.spec
 	# copy electrum to main.py
-	@cp ../../run_electrum_nmc ../../main.py
+	@cp ../../run_electrum_radc ../../main.py
 	@-if [ ! -d "../../.buildozer" ];then \
 		cd ../..; buildozer android debug;\
 		cp -f blacklist.txt .buildozer/android/platform/python-for-android/src/blacklist.txt;\

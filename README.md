@@ -1,12 +1,4 @@
-# electrum-radiocoin-4.0.1 
-
-
-
-https://github.com/c4pt000/radiox-exchange
-
-![s1](https://raw.githubusercontent.com/c4pt000/radiox-exchange/main/radiox-current.png)
-
-to do, soon implent paper wallet directly into electrum for both wallet clients
+# electrum-radiocoin-4.0.1 for electrum-dogecoin https://github.com/c4pt000/electrum-dogecoin
 
 * based off of electrum-nmc
 
@@ -14,24 +6,8 @@ to do, soon implent paper wallet directly into electrum for both wallet clients
 # for server https://github.com/c4pt000/electrumx-dogecoin-server-radiocoin-4.1.4
 # for DOGECOIN https://github.com/c4pt000/electrum-dogecoin
 
-* (old python2 version) for dogecoin-electrum 2.2.1
+for dogecoin-electrum
 https://github.com/c4pt000/electrum-wallet-doge
-
-
-
-todo:
-balance bug in "history" addresses tab shows accurate balance
-export privkey from wallet to transfer funds out of wallet in case of a send tx balance error
-<br>
-<br>
-addresses tab reports current correct balance of wallet
-<br>
-<br>
-balance bug in "history" tab, (doesnt effect "addresses" tab)
-<br>
-
-![s1](https://raw.githubusercontent.com/c4pt000/electrum-radiocoin/main/balance-bug-check-addresses-tab.png)
-
 
 <br>
 <br>
@@ -46,12 +22,25 @@ https://github.com/c4pt000/electrum-radiocoin/releases/tag/win10
 fedora 34
 <br>
 will not send a TX while running from docker use the installer natively instead 
+```
+docker run -it --net host -d -e "DISPLAY=${DISPLAY:-:0.0}" -v /tmp/.X11-unix:/tmp/.X11-unix fedora:34
+
+# (fedora 34)
+
+cd /opt
+ yum install git nano wget -y
+ git clone https://github.com/c4pt000/electrum-radiocoin
+ cd electrum-radiocoin
+ sh install-radiocoin-electrum.sh 
+```
+
+ * todo hardcode  a minimum of 1.00 RADC fee to send (with electrum)
 
 # dont use with docker
 * wont send a transaction while running from the docker guest (even with --net host)
 
 * 07-06-2021
-# PAPER wallet import works with radiocoin-electrum-4.0.1
+# PAPER wallet import works with radiocoin-electrum-4.1.4
 ![s1](https://raw.githubusercontent.com/c4pt000/radiocoin/master/just-the-right-QR-code-ignore-the-left.png)
 # leave random deposit address and just import the QR on the right side of the crypto-currency bill (with the camera logo icon) 
 * requires "pip3 install python-zbar" ? and uvcvideo and web cam support
@@ -66,13 +55,15 @@ SAVE YOUR WALLET SEED TO RESTORE A BACKUP OF YOUR WALLET
 ![s1](https://github.com/c4pt000/radiocoin/releases/download/electrum-wallet/electrum--radiocoin-sign-broadcast.png)
 ![s1](https://github.com/c4pt000/radiocoin/releases/download/electrum-wallet/electrum-4.1.4-radiocoin-send-amount.png)
 ![s1](https://github.com/c4pt000/radiocoin/releases/download/electrum-wallet/electrum-finalize-transaction.png)
-
-
-requires docker (for building templates)
-contrib builder build-wine for win32 installer
 ```
-docker build -t electrum-nmc-wine-builder-img contrib/build-wine
-
-docker run -it --name electrum-wine-builder-cont -v $PWD:/opt/wine64/drive_c/electrum-nmc --rm --workdir /opt/wine64/drive_c/electrum-nmc/contrib/build-wine  electrum-nmc-wine-builder-img  ./build.sh
+wget https://raw.githubusercontent.com/c4pt000/Docker-fedora-34-nested-docker-OpenCore-ARM64/main/xhost-gen
+chmod +x xhost-gen
+#check if your system supports xhost as root
+xhost
+#if not install xhost
+./xhost-gen
+#as root 
+echo "xhost SI:localuser:root" >> /root/.bashrc
+source /root/.bashrc
 
 ```

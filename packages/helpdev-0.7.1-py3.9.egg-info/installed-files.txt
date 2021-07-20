@@ -1,0 +1,11 @@
+../../../bin/helpdev
+../helpdev/__init__.py
+../helpdev/__main__.py
+../helpdev/__pycache__/__init__.cpython-39.pyc
+../helpdev/__pycache__/__main__.cpython-39.pyc
+PKG-INFO
+SOURCES.txt
+dependency_links.txt
+entry_points.txt
+requires.txt
+top_level.txt
