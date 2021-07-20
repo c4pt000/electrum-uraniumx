@@ -1,6 +1,0 @@
-
-[:python_version < "3.8"]
-importlib_metadata
-
-[memory_info]
-psutil>=5.6
