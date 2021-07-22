@@ -1,5 +1,5 @@
 
-use at your risk floating decimal issues,
+# use at your risk floating decimal issues, (for stability use radiocoin-qt)
 
 # electrum-radiocoin-4.0.1 for electrum-dogecoin
 
