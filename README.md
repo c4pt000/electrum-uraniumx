@@ -3,6 +3,8 @@
 
 # use at your risk floating decimal issues, (for stability use radiocoin-qt)
 
+<h3>you've been warned continue at your own risk</h3>
+
 * there are floating decimal issues, mostly the address tab in the main window never lies but it can get stuck,
 * the history tab can be inaccurate, also sending maximum with the send window can be stuck,
 * but import private key balance works to resolve stuck transactions or floating errors,
