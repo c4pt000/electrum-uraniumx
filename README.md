@@ -10,7 +10,7 @@
 * the video posted here is kind of confusing i guess for some, its meant as a panic resource to recover funds, 
 * same here as radiocoin-electrum 
 
-( a side note of sarcasm the code for electrum sat for years with developers all over the world, even elon musks boasts how great dogecoin can be with contracts the first step to finish a plate of dinner is to make the convenice of allowing the end user to sync a dogecoin wallet quickly instead of waiting constantly for dogecoin-qt to sync for a few hours or few days ) 
+( a side note of sarcasm the code for electrum sat for years with developers all over the world, even elon musk boasts how great dogecoin can be with contracts the first step to finish a plate of dinner is to make the convenice of allowing the end user to sync a dogecoin wallet quickly instead of waiting constantly for dogecoin-qt to sync for a few hours or few days ) 
 
 * I dont have money to really test these wallets except for radiocoin 
 
