@@ -6,7 +6,7 @@
 * there are floating decimal issues, mostly the address tab in the main window never lies but it can get stuck,
 * the history tab can be inaccurate, also sending maximum with the send window can be stuck,
 * but import private key balance works to resolve stuck transactions or floating errors,
-* right clicking to export an address balance to  import into a stable desktop-qt balance and checking the explorer can fix issues ( I was able to recover 1.3 Billion balance transaction send from a floating point error 
+* right clicking to export an address balance to  import into a stable desktop-qt balance and checking the explorer can fix issues ( I was able to recover a 1.3 Billion balance transaction send from a floating point error 
 * the video posted here is kind of confusing i guess for some, its meant as a panic resource to recover funds, 
 * same here as radiocoin-electrum 
 
