@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Electrum-Radiocoin
+title = Electrum-NMC
 
 # (str) Package name
-package.name = Electrum_Radiocoin
+package.name = Electrum_NMC
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum.electrum_nmc
+package.domain = org.namecoin.electrum_nmc
 
 # (str) Source code where the main.py live
 source.dir = .
