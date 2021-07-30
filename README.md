@@ -7,8 +7,7 @@ or
 apt install google*fonts
 ``` 
 <br>
-# decimal floating errors possibly fixed (I have no dogecoin at the moment to test this)
-
+# decimal floating errors possibly fixed balance is back in the bottom status bar, and the balance reflects in the "addresses" tab
 <br>
 <br>
 <br>
