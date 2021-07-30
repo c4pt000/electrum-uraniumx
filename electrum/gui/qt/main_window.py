@@ -987,7 +987,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
 
                 # append name count
                 name_confirmed_count, name_pending_count = get_wallet_name_count(self.wallet, self.network)
-                text += ", {} {}, {} {}".format(name_confirmed_count, _("names"), name_pending_count, _("pending registration"))
+#                text += ", {} {}, {} {}".format(name_confirmed_count, _("names"), name_pending_count, _("pending registration"))
         else:
             if self.network.proxy:
                 text = "{} ({})".format(_("Not connected"), _("proxy enabled"))
