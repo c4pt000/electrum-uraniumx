@@ -1,13 +1,13 @@
 
 
-# * 07-30-2021 (requires for font formatting in console , cleaner look and feel)
+# * 07-30-2021 (requires for font formatting in console , cleaner look and feel) decimal floating errors possibly fixed balance is back in the bottom status bar, and the balance reflects in the "addresses" tab
 ```
 yum install google*fonts 
 or 
 apt install google*fonts
 ``` 
 <br>
-# decimal floating errors possibly fixed balance is back in the bottom status bar, and the balance reflects in the "addresses" tab
+
 <br>
 <br>
 <br>
