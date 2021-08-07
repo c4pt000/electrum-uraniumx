@@ -1,5 +1,8 @@
+Untested no computer at the moment
+```
+docker run -it -d -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix c4pt/electrum-radiocoin-fbal
 
-
+```
 # * 07-30-2021 (requires for font formatting in console , cleaner look and feel) decimal floating errors possibly fixed balance is back in the bottom status bar, and the balance reflects in the "addresses" tab
 ```
 yum install google*fonts 
