@@ -1,4 +1,8 @@
 Untested no computer at the moment
+requires xhost as
+```
+xhost SI:localuser:root
+```
 ```
 docker run -it -d -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix c4pt/electrum-radiocoin-fbal
 
