@@ -14,7 +14,17 @@ or
 apt install google*fonts
 ``` 
 <br>
+native fix for conflict when both dogecoin and radiocoin are installed (since they both share the same executable as a conflict, since they are both a working rush job)
+```
+sudo cp -rf electrum-radiocoin /usr/bin/
 
+/usr/bin/electrum-radiocoin/run_electrum 
+
+
+add ^ to launcher
+
+  ->       /usr/bin/electrum-radiocoin/run_electrum 
+```
 <br>
 <br>
 <br>
