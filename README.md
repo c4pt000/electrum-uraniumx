@@ -1,4 +1,3 @@
-Untested no computer at the moment
 requires xhost as
 ```
 xhost SI:localuser:root
