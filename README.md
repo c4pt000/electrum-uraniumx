@@ -1,3 +1,8 @@
+# 09-14-2021
+* only use radiocoin-qt or radiocoind for now (avoid electrum-radiocoin , electrum-dogecoin still need to iron out bugs)
+
+market orders are live @ https://github.com/c4pt000/radiox-exchange and exbitron.com
+
 requires xhost as
  ```
 xhost SI:localuser:root
