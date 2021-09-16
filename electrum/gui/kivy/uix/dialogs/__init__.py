@@ -81,6 +81,9 @@ class EventsDialog(Factory.Popup):
     def on_press(self, instance):
         pass
 
+    def close(self):
+        self.dismiss()
+
 
 class SelectionDialog(EventsDialog):
 
@@ -209,7 +212,7 @@ class OutputList(RecycleView):
     def update(self, outputs: Sequence['TxOutput']):
         res = []
         for o in outputs:
-            value = self.app.format_amount_and_units(o.value)
+            value = self.app.format_amount_and_units(o.value_display)
             res.append({'address': o.get_ui_address_str(), 'value': value})
         self.data = res
 

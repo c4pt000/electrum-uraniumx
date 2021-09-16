@@ -200,7 +200,7 @@ class Software_KeyStore(KeyStore):
 
     def name_salt(self, identifier: bytes, sequence: 'AddressIndexGeneric', password) -> bytes:
         privkey, compressed = self.get_private_key(sequence, password)
-        return hkdf_sha256_32_20(privkey, identifier, b"Namecoin Registration Salt")
+        return hkdf_sha256_32_20(privkey, identifier, b"Radiocoin Registration Salt")
 
     @abstractmethod
     def update_password(self, old_password, new_password):

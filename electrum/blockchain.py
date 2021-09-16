@@ -569,7 +569,7 @@ class Blockchain(Logger):
             return t
         # new target
         if (index * 2016 + 2015 > 19200) and (index * 2016 + 2015 + 1 > 2016):
-            # Namecoin: Apply retargeting hardfork after AuxPoW start
+            # Radiocoin: Apply retargeting hardfork after AuxPoW start
             first = self.read_header(index * 2016 - 1)
         else:
             first = self.read_header(index * 2016)
@@ -682,7 +682,7 @@ class Blockchain(Logger):
         # for each chunk, store the hash of the last block and the target after the chunk
         cp = []
 
-        # Namecoin: don't generate checkpoints for unexpired names, because
+        # Radiocoin: don't generate checkpoints for unexpired names, because
         # otherwise we'll need to fetch chunks on demand during name lookups,
         # which will add some latency.  TODO: Allow user-configurable pre-
         # fetching of checkpointed unexpired chunks.

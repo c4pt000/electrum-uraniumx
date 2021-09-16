@@ -50,12 +50,12 @@ class AbstractNet:
 
     @classmethod
     def max_checkpoint(cls) -> int:
-        # Namecoin: We can't actually fully use the last checkpoint, because
+        # Radiocoin: We can't actually fully use the last checkpoint, because
         # verifying the chunk following the last checkpoint requires having the
         # chunk for the last checkpoint, because of the timewarp hardfork.  So
         # we artificially return one fewer checkpoint than is available.
         #
-        # It should be noted that this hack causes Electrum-NMC to need at
+        # It should be noted that this hack causes Electrum-RADC to need at
         # least 2 checkpoints, whereas upstream Electrum only needs 1.
         #return max(0, len(cls.CHECKPOINTS) * 2016 - 1)
         return max(0, (len(cls.CHECKPOINTS)-1) * 2016 - 1)

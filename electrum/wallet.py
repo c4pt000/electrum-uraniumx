@@ -1050,7 +1050,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
         return dust_threshold(self.network)
 
     # name_op is for a name operation that will be added to the base tx.
-    # Namecoin consensus rules disallow multiple name outputs per tx.
+    # Radiocoin consensus rules disallow multiple name outputs per tx.
     def get_unconfirmed_base_tx_for_batching(self, name_op=None) -> Optional[Transaction]:
         candidate = None
         for hist_item in self.get_history():
@@ -1076,7 +1076,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
             # all inputs should be is_mine
             if not all([self.is_mine(self.get_txin_address(txin)) for txin in tx.inputs()]):
                 continue
-            # Namecoin: avoid multiple name outputs in a single transaction,
+            # Radiocoin: avoid multiple name outputs in a single transaction,
             # but allow replacing a name_anyupdate output with the same
             # identifier
             if name_op is not None:
@@ -1211,7 +1211,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
                     lower_bound = lower_bound if not is_local else 0
                     return int(max(lower_bound, original_fee_estimator(size)))
                 txi = base_tx.inputs()
-                # Namecoin: remove any existing name outputs for the same
+                # Radiocoin: remove any existing name outputs for the same
                 # identifier, since we'll be replacing them.  We already know
                 # that there aren't any existing name outputs for different
                 # identifiers, because get_unconfirmed_base_tx_for_batching
@@ -1219,7 +1219,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
                 txo = list(filter(lambda o: not self.is_change(o.address) and o.name_op is None, base_tx.outputs()))
                 old_change_addrs = [o.address for o in base_tx.outputs() if self.is_change(o.address)]
 
-                # Namecoin: remove any new name inputs if the existing
+                # Radiocoin: remove any new name inputs if the existing
                 # transaction already has a name input.
                 if any([i.name_op is not None for i in txi]):
                     name_inputs = []
@@ -1538,7 +1538,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
     def get_addr_utxo(self, address: str) -> Dict[TxOutpoint, PartialTxInput]:
         utxos = super().get_addr_utxo(address)
         for _, x in utxos.items():
-            # TODO: Namecoin: Upstream Electrum only returns inputs with the
+            # TODO: Radiocoin: Upstream Electrum only returns inputs with the
             # "trusted address" field set, not the scriptpubkey set.  This prevents
             # us from seeing the name prefix.  For now we manually fill in the
             # scriptpubkey via add_input_info, but we should submit a PR to
@@ -2119,7 +2119,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
             raise Exception("Cannot specify both 'fee' and 'feerate' at the same time!")
 
         # The domain_addr map will (for unknown reasons) delete its contents when
-        # read.  Since we want to use it multiple times for Namecoin, the most
+        # read.  Since we want to use it multiple times for Radiocoin, the most
         # obvious workaround is to simply make copies of it before we cast it
         # into a map.
         try:

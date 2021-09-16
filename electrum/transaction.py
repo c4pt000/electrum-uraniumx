@@ -845,14 +845,14 @@ class Transaction:
         else:
             raise UnknownTxinType(f'cannot construct preimage_script for txin_type: {txin.script_type}')
 
-        # Namecoin:  For P2PK and P2PKH scripts, the preimage includes also
+        # Radiocoin:  For P2PK and P2PKH scripts, the preimage includes also
         # the name prefix.  P2SH and segwit do not.
         if txin.script_type in ['p2pkh', 'p2pk']:
             res = name_op_to_script(txin.name_op) + res
 
         return res
 
-    # TODO: Namecoin: Add the 0.01 NMC that's permanently locked in the name
+    # TODO: Radiocoin: Add the 0.01 NMC that's permanently locked in the name
     # when serializing outputs
     @classmethod
     def serialize_input(self, txin: TxInput, script: str) -> str:
@@ -898,7 +898,7 @@ class Transaction:
         self._cached_network_ser_bytes = bfh(self.serialize())
         return self._cached_network_ser_bytes
 
-    # TODO: Namecoin: Signatures commit to the input value (per BIP143), but
+    # TODO: Radiocoin: Signatures commit to the input value (per BIP143), but
     # for name operations, the value in the txin does not include the locked
     # amount.  Fix this.
     def serialize_to_network(self, *, estimate_size=False, include_sigs=True, force_legacy=False) -> str:
@@ -1107,8 +1107,8 @@ def tx_from_any(raw: Union[str, bytes], *,
         return PartialTransaction.from_raw_psbt(raw)
     except BadHeaderMagic:
         if raw[:10] == b'EPTF\xff'.hex():
-            raise SerializationError("Partial transactions generated with old Electrum-NMC versions "
-                                     "(< 4.0) are no longer supported. Please upgrade Electrum-NMC on "
+            raise SerializationError("Partial transactions generated with old Electrum-RADC versions "
+                                     "(< 4.0) are no longer supported. Please upgrade Electrum-RADC on "
                                      "the other machine where this transaction was created.")
     try:
         tx = Transaction(raw)
@@ -1427,9 +1427,9 @@ class PartialTxInput(TxInput, PSBTSection):
 
     @property
     def scriptpubkey(self) -> Optional[bytes]:
-        # TODO: Namecoin: Upstream Electrum assumes that a scriptpubkey can
-        # always be derived from an address.  This is false for Namecoin
-        # because of the name prefix.  For Namecoin we currently deprioritize
+        # TODO: Radiocoin: Upstream Electrum assumes that a scriptpubkey can
+        # always be derived from an address.  This is false for Radiocoin
+        # because of the name prefix.  For Radiocoin we currently deprioritize
         # the "trusted address" feature here, but we should submit a PR to
         # upstream Electrum that makes it use a "trusted scriptpubkey" instead.
         if self.utxo:
@@ -1772,7 +1772,7 @@ class PartialTransaction(Transaction):
             self.locktime = locktime
         if version is not None:
             self.version = version
-        # Name ops require a Namecoin-version transaction
+        # Name ops require a Radiocoin-version transaction
         if any([o.name_op is not None for o in self.outputs()]):
             self.version = NAMECOIN_VERSION
         self.BIP69_sort()

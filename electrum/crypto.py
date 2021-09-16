@@ -48,7 +48,7 @@ try:
     from Cryptodome.Cipher import ChaCha20 as CD_ChaCha20
     from Cryptodome.Cipher import AES as CD_AES
 
-    # HKDF for Namecoin deterministic salts
+    # HKDF for Radiocoin deterministic salts
     from Cryptodome.Protocol.KDF import HKDF as CD_HKDF
     from Cryptodome.Hash import SHA256 as CD_SHA256
 except:
@@ -66,7 +66,7 @@ try:
     from cryptography.hazmat.backends import default_backend as CG_default_backend
     import cryptography.hazmat.primitives.ciphers.aead as CG_aead
 
-    # HKDF for Namecoin deterministic salts
+    # HKDF for Radiocoin deterministic salts
     from cryptography.hazmat.primitives.kdf.hkdf import HKDF as CG_HKDF
     from cryptography.hazmat.primitives.hashes import SHA256 as CG_SHA256
 except:
@@ -181,7 +181,7 @@ class UnexpectedPasswordHashVersion(InvalidPassword, WalletFileException):
         return "{unexpected}: {version}\n{instruction}".format(
             unexpected=_("Unexpected password hash version"),
             version=self.version,
-            instruction=_('You are most likely using an outdated version of Electrum-NMC. Please update.'))
+            instruction=_('You are most likely using an outdated version of Electrum-RADC. Please update.'))
 
 
 class UnsupportedPasswordHashVersion(InvalidPassword, WalletFileException):

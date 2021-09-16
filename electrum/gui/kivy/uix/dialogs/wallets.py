@@ -16,7 +16,6 @@ Builder.load_string('''
     title: _('Wallets')
     id: popup
     path: ''
-    disable_new: True
     BoxLayout:
         orientation: 'vertical'
         padding: '10dp'
@@ -34,8 +33,7 @@ Builder.load_string('''
             cols: 3
             size_hint_y: 0.1
             Button:
-                id: new_button
-                disabled: root.disable_new
+                id: open_button
                 size_hint: 0.1, None
                 height: '48dp'
                 text: _('New')
@@ -55,14 +53,12 @@ Builder.load_string('''
 
 class WalletDialog(Factory.Popup):
 
-    def __init__(self, path, callback, disable_new):
+    def __init__(self, path, callback):
         Factory.Popup.__init__(self)
         self.path = path
         self.callback = callback
-        self.disable_new = disable_new
 
     def new_wallet(self, dirname):
-        assert self.disable_new is False
         def cb(filename):
             if not filename:
                 return

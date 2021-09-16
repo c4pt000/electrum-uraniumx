@@ -54,7 +54,7 @@ from electrum import (keystore, ecc, constants, util, bitcoin, commands,
 from electrum.bitcoin import COIN, is_address
 from electrum.plugin import run_hook, BasePlugin
 from electrum.i18n import _
-from electrum.names import format_name_identifier, get_wallet_name_count, name_new_mature_in
+#from electrum.names import format_name_identifier, get_wallet_name_count, name_new_mature_in
 from electrum.util import (format_time,
                            UserCancelled, profiler,
                            bh2u, bfh, InvalidPassword,
@@ -206,28 +206,26 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         self.utxo_tab = self.create_utxo_tab()
         self.console_tab = self.create_console_tab()
         self.contacts_tab = self.create_contacts_tab()
-        self.channels_tab = self.create_channels_tab()
-        self.buy_names_tab = self.create_buy_names_tab()
-#        self.names_tab = self.create_names_tab()
+     #   self.channels_tab = self.create_channels_tab()
         tabs.addTab(self.create_history_tab(), read_QIcon("tab_history.png"), _('History'))
         tabs.addTab(self.send_tab, read_QIcon("tab_send.png"), _('Send'))
         tabs.addTab(self.receive_tab, read_QIcon("tab_receive.png"), _('Receive'))
- #       tabs.addTab(self.buy_names_tab, read_QIcon("namecoin-logo.png"), _('Buy Names'))
-#        tabs.addTab(self.names_tab, read_QIcon("namecoin-logo.png"), _('Manage Names'))
+        tabs.addTab(self.contacts_tab, read_QIcon("tab_contacts.png"), _('Contacts'))
+        tabs.addTab(self.console_tab, read_QIcon("tab_console.png"), _('Console'))
 
         def add_optional_tab(tabs, tab, icon, description, name):
             tab.tab_icon = icon
             tab.tab_description = description
             tab.tab_pos = len(tabs)
             tab.tab_name = name
-            if self.config.get('show_{}_tab'.format(name), False):
+            if self.config.get('show_{}_tab'.format(name), True):
                 tabs.addTab(tab, icon, description.replace("&", ""))
 
         add_optional_tab(tabs, self.addresses_tab, read_QIcon("tab_addresses.png"), _("&Addresses"), "addresses")
-        add_optional_tab(tabs, self.channels_tab, read_QIcon("lightning.png"), _("Channels"), "channels")
-        add_optional_tab(tabs, self.utxo_tab, read_QIcon("tab_coins.png"), _("Co&ins"), "utxo")
-        add_optional_tab(tabs, self.contacts_tab, read_QIcon("tab_contacts.png"), _("Con&tacts"), "contacts")
-        add_optional_tab(tabs, self.console_tab, read_QIcon("tab_console.png"), _("Con&sole"), "console")
+#        add_optional_tab(tabs, self.channels_tab, read_QIcon("lightning.png"), _("Channels"), "channels")
+        add_optional_tab(tabs, self.utxo_tab, read_QIcon("tab_coins.png"), _("&Coins"), "utxo")
+        add_optional_tab(tabs, self.contacts_tab, read_QIcon("tab_contacts.png"), _("&Contacts"), "contacts")
+        add_optional_tab(tabs, self.console_tab, read_QIcon("tab_console.png"), _("&Console"), "console")
 
         tabs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
@@ -507,7 +505,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         self.update_console()
         self.clear_receive_tab()
         self.request_list.update()
-        self.channels_list.update()
+#        self.channels_list.update()
         self.tabs.show()
         self.init_geometry()
         if self.config.get('hide_gui') and self.gui_object.tray.isVisible():
@@ -550,8 +548,8 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         if self.wallet.is_watching_only():
             msg = ' '.join([
                 _("This wallet is watching-only."),
-                _("This means you will not be able to spend Namecoins or update names with it."),
-                _("Make sure you own the seed phrase or the private keys, before you request Namecoins or names to be sent to this wallet.")
+                _("This means you will not be able to spend Radiocoins or update names with it."),
+                _("Make sure you own the seed phrase or the private keys, before you request Radiocoins or names to be sent to this wallet.")
             ])
             self.show_warning(msg, title=_('Watch-only wallet'))
 
@@ -568,7 +566,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         msg = ''.join([
             _("You are in testnet mode."), ' ',
             _("Testnet coins and names are worthless."), '\n',
-            _("Testnet is separate from the main Namecoin network. It is used for testing.")
+            _("Testnet is separate from the main Radiocoin network. It is used for testing.")
         ])
         cb = QCheckBox(_("Don't show this again."))
         cb_checked = False
@@ -721,7 +719,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         view_menu = menubar.addMenu(_("&View"))
         add_toggle_action(view_menu, self.addresses_tab)
         add_toggle_action(view_menu, self.utxo_tab)
-        add_toggle_action(view_menu, self.channels_tab)
+       # add_toggle_action(view_menu, self.channels_tab)
         add_toggle_action(view_menu, self.contacts_tab)
         add_toggle_action(view_menu, self.console_tab)
 
@@ -778,11 +776,11 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
     def show_about(self):
         QMessageBox.about(self, "Electrum-RADC",
                           (_("Version")+" %s" % ELECTRUM_VERSION + "\n\n" +
-                           _("Electrum-RADC's focus is speed, with low resource usage and simplifying Namecoin.") + " " +
+                           _("Electrum-RADC's focus is speed, with low resource usage and simplifying Radiocoin.") + " " +
                            _("You do not need to perform regular backups, because your wallet can be "
                               "recovered from a secret phrase that you can memorize or write on paper.") + " " +
                            _("Startup times are instant because it operates in conjunction with high-performance "
-                              "servers that handle the most complicated parts of the Namecoin system.") + "\n\n" +
+                              "servers that handle the most complicated parts of the Radiocoin system.") + "\n\n" +
                            _("https://github.com/c4pt000/electrum-radiocoin")))
 
     def show_update_check(self, version=None):
@@ -986,7 +984,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
                     icon = read_QIcon("status_connected_proxy%s.png"%fork_str)
 
                 # append name count
-                name_confirmed_count, name_pending_count = get_wallet_name_count(self.wallet, self.network)
+#                name_confirmed_count, name_pending_count = get_wallet_name_count(self.wallet, self.network)
 #                text += ", {} {}, {} {}".format(name_confirmed_count, _("names"), name_pending_count, _("pending registration"))
         else:
             if self.network.proxy:
@@ -1017,7 +1015,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
 #        self.names_uno_list.update()
         self.contact_list.update()
         self.invoice_list.update()
-        self.channels_list.update_rows.emit(wallet)
+#        self.channels_list.update_rows.emit(wallet)
         self.update_completions()
 
     def create_channels_tab(self):
@@ -1096,7 +1094,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         msg = ' '.join([
             _('Expiration date of your request.'),
             _('This information is seen by the recipient if you send them a signed payment request.'),
-            _('Expired requests have to be deleted manually from your list, in order to free the corresponding Namecoin addresses.'),
+            _('Expired requests have to be deleted manually from your list, in order to free the corresponding Radiocoin addresses.'),
             _('The namecoin address never expires and will always be part of this electrum-RADC wallet.'),
         ])
         grid.addWidget(HelpLabel(_('Expires after'), msg), 2, 0)
@@ -1326,7 +1324,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         self.amount_e = BTCAmountEdit(self.get_decimal_point)
         self.payto_e = PayToEdit(self)
         msg = _('Recipient of the funds.') + '\n\n'\
-              + _('You may enter a Namecoin address, a label from your list of contacts (a list of completions will be proposed), or an alias (email-like address that forwards to a Namecoin address)')
+              + _('You may enter a Radiocoin address, a label from your list of contacts (a list of completions will be proposed), or an alias (email-like address that forwards to a Radiocoin address)')
         payto_label = HelpLabel(_('Pay to'), msg)
         grid.addWidget(payto_label, 1, 0)
         grid.addWidget(self.payto_e, 1, 1, 1, -1)
@@ -1460,7 +1458,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
 
         for o in outputs:
             if o.scriptpubkey is None:
-                self.show_error(_('Namecoin Address is None'))
+                self.show_error(_('Radiocoin Address is None'))
                 return True
             if o.value_display is None:
                 self.show_error(_('Invalid Amount'))
@@ -2052,7 +2050,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         grid.addWidget(QLabel(_("Node ID") + ':'), 0, 0)
         grid.addWidget(QLabel(lnaddr.pubkey.serialize().hex()), 0, 1)
         grid.addWidget(QLabel(_("Amount") + ':'), 1, 0)
-        # TODO: Namecoin: use invoice.amount_display (to hide 0.01 NMC in name
+        # TODO: Radiocoin: use invoice.amount_display (to hide 0.01 NMC in name
         # coins).
         amount_str = self.format_amount(invoice.get_amount_sat()) + ' ' + self.base_unit()
         grid.addWidget(QLabel(amount_str), 1, 1)
@@ -2340,7 +2338,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
             grid.addWidget(lightning_b, 5, 2)
         else:
             grid.addWidget(QLabel(_("Not available for this wallet.")), 5, 1)
-            grid.addWidget(HelpButton(_("Lightning is currently restricted to HD wallets with p2wpkh addresses.")), 5, 2)
+         #   grid.addWidget(HelpButton(_("Lightning is currently restricted to HD wallets with p2wpkh addresses.")), 5, 2)
         vbox.addLayout(grid)
 
         labels_clayout = None
@@ -2466,7 +2464,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         address  = address.text().strip()
         message = message.toPlainText().strip()
         if not bitcoin.is_address(address):
-            self.show_message(_('Invalid Namecoin address.'))
+            self.show_message(_('Invalid Radiocoin address.'))
             return
         if self.wallet.is_watching_only():
             self.show_message(_('This is a watching-only wallet.'))
@@ -2494,7 +2492,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
         address  = address.text().strip()
         message = message.toPlainText().strip().encode('utf-8')
         if not bitcoin.is_address(address):
-            self.show_message(_('Invalid Namecoin address.'))
+            self.show_message(_('Invalid Radiocoin address.'))
             return
         try:
             # This can throw on invalid base64
@@ -3112,15 +3110,15 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
             comb_feerate_str = self.format_fee_rate(comb_feerate) if comb_feerate else ''
             combined_feerate.setText(comb_feerate_str)
         fee_e.textChanged.connect(on_fee_edit)
-        def get_child_fee_from_total_feerate(fee_per_kb):
-            fee = fee_per_kb * total_size / 1000 - parent_fee
-            fee = min(max_fee, fee)
-            fee = max(total_size, fee)  # pay at least 1 sat/byte for combined size
-            return fee
-        suggested_feerate = self.config.fee_per_kb()
-        if suggested_feerate is None:
-            self.show_error(f'''{_("Can't CPFP'")}: {_('Dynamic fee estimates not available')}''')
-            return
+       # def get_child_fee_from_total_feerate(fee_per_kb):
+       #     fee = fee_per_kb * total_size / 1000 - parent_fee
+       #     fee = min(max_fee, fee)
+       #     fee = max(total_size, fee)  # pay at least 1 sat/byte for combined size
+       #     return fee
+       # suggested_feerate = self.config.fee_per_kb()
+      #  if suggested_feerate is None:
+       #     self.show_error(f'''{_("Can't CPFP'")}: {_('Dynamic fee estimates not available')}''')
+        #    return
         fee = get_child_fee_from_total_feerate(suggested_feerate)
         fee_e.setAmount(fee)
         grid.addWidget(QLabel(_('Fee for child') + ':'), 3, 0)
@@ -3244,11 +3242,11 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
 
         # TODO: allow hex names
         self.buy_names_new_name_lineedit = QLineEdit()
-        self.buy_names_new_name_lineedit.setToolTip(_("Enter a name to be registered via Namecoin."))
+        self.buy_names_new_name_lineedit.setToolTip(_("Enter a name to be registered via Radiocoin."))
         self.buy_names_new_name_lineedit.textChanged.connect(self.update_buy_names_preview)
         vbox.addWidget(self.buy_names_new_name_lineedit)
 
-        self.buy_names_format_explain_label = QLabel(_("<html><head/><body><p>Use <span style='font-weight:600;'>d/</span> prefix for domain names.  E.g. <span style='font-weight:600;'>d/mysite</span> will register <span style='font-weight:600;'>mysite.bit</span></p><p>See the <a href='https://github.com/namecoin/proposals/blob/master/ifa-0001.md'><span style='text-decoration:underline; color:#0000ff;'>Namecoin Domain Names specification</span></a> for reference.  Other prefixes can be used for miscellaneous purposes (not domain names).</p></body></html>"))
+        self.buy_names_format_explain_label = QLabel(_("<html><head/><body><p>Use <span style='font-weight:600;'>d/</span> prefix for domain names.  E.g. <span style='font-weight:600;'>d/mysite</span> will register <span style='font-weight:600;'>mysite.bit</span></p><p>See the <a href='https://github.com/namecoin/proposals/blob/master/ifa-0001.md'><span style='text-decoration:underline; color:#0000ff;'>Radiocoin Domain Names specification</span></a> for reference.  Other prefixes can be used for miscellaneous purposes (not domain names).</p></body></html>"))
         self.buy_names_format_explain_label.setTextFormat(Qt.RichText)
         self.buy_names_format_explain_label.setWordWrap(True)
         self.buy_names_format_explain_label.setOpenExternalLinks(True)

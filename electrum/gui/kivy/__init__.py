@@ -29,9 +29,6 @@ import sys
 import os
 from typing import TYPE_CHECKING
 
-KIVY_GUI_PATH = os.path.abspath(os.path.dirname(__file__))
-os.environ['KIVY_DATA_DIR'] = os.path.join(KIVY_GUI_PATH, 'data')
-
 try:
     sys.argv = ['']
     import kivy
@@ -42,8 +39,7 @@ except ImportError:
 
 # minimum required version for kivy
 kivy.require('1.8.0')
-
-from electrum.logging import Logger
+from kivy.logger import Logger
 
 if TYPE_CHECKING:
     from electrum.simple_config import SimpleConfig
@@ -53,11 +49,10 @@ if TYPE_CHECKING:
 
 
 
-class ElectrumGui(Logger):
+class ElectrumGui:
 
     def __init__(self, config: 'SimpleConfig', daemon: 'Daemon', plugins: 'Plugins'):
-        Logger.__init__(self)
-        self.logger.debug('ElectrumGUI: initialising')
+        Logger.debug('ElectrumGUI: initialising')
         self.daemon = daemon
         self.network = daemon.network
         self.config = config

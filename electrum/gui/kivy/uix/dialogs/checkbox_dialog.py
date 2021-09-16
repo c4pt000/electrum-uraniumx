@@ -3,24 +3,18 @@ from kivy.factory import Factory
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
-
-
-
 Builder.load_string('''
 <CheckBoxDialog@Popup>
     id: popup
     title: ''
-    description: ''
     size_hint: 0.8, 0.8
     pos_hint: {'top':0.9}
     BoxLayout:
         orientation: 'vertical'
-        padding: '10dp'
-        spacing: '10dp'
         Label:
-            size_hint: 1, None
-            text: root.description
-            halign: 'justify'
+            id: description
+            text: ''
+            halign: 'left'
             text_size: self.width, None
             size: self.texture_size
         BoxLayout:
@@ -53,6 +47,6 @@ class CheckBoxDialog(Factory.Popup):
     def __init__(self, title, text, status, callback):
         Factory.Popup.__init__(self)
         self.ids.cb.active = status
-        self.description = text
+        self.ids.description.text = text
         self.callback = callback
         self.title = title
