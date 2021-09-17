@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Electrum
+title = electrum-radiocoin
 
 # (str) Package name
-package.name = Electrum
+package.name = electrum-radiocoin
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum
+package.domain = org.electrum.radiocoin
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -75,16 +75,17 @@ android.permissions = INTERNET, CAMERA, WRITE_EXTERNAL_STORAGE
 
 # (int) Android API to use  (targetSdkVersion AND compileSdkVersion)
 # note: when changing, Dockerfile also needs to be changed to install corresponding build tools
-android.api = 29
+android.api = 31
 
 # (int) Minimum API required. You will need to set the android.ndk_api to be as low as this value.
-android.minapi = 21
+#android.minapi = 21
 
 # (str) Android NDK version to use
-android.ndk = 22b
+#android.ndk = 22b
+android.ndk = 19c
 
 # (int) Android NDK API to use (optional). This is the minimum API your app will support.
-android.ndk_api = 21
+#android.ndk_api = 21
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = True
@@ -102,7 +103,9 @@ android.ant_path = /opt/android/apache-ant
 # This can be useful to avoid excess Internet downloads or save time
 # when an update is due and you just want to test/build your package
 # note(ghost43): probably needed for reproducibility. versions pinned in Dockerfile.
-android.skip_update = True
+#android.skip_update = True
+
+android.skip_update = False
 
 # (bool) If True, then automatically accept SDK license
 # agreements. This is intended for automation only. If set to False,
@@ -132,6 +135,8 @@ android.add_activities = org.electrum.qr.SimpleScannerActivity
 # not yet merged features.
 #android.branch = master
 
+p4a.branch = master
+
 # (str) OUYA Console category. Should be one of GAME or APP
 # If you leave this blank, OUYA support will not be enabled
 #android.ouya.category = GAME
@@ -156,6 +161,8 @@ android.manifest.launch_mode = singleTask
 # note: can be overwritten by APP_ANDROID_ARCH env var
 #android.arch = armeabi-v7a
 
+#android.arch = x86
+ 
 # (list) Android application meta-data to set (key=value format)
 #android.meta_data =
 
@@ -204,7 +211,7 @@ p4a.local_recipes = %(source.dir)s/contrib/android/p4a_recipes/
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 1
+log_level = 2
 
 # (str) Path to build output (i.e. .apk, .ipa) storage
 bin_dir = ./dist

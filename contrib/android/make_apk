@@ -46,15 +46,20 @@ if [[ -n "$1"  && "$1" == "release" ]] ; then
     export P4A_RELEASE_KEYALIAS_PASSWD=$password
     export P4A_RELEASE_KEYALIAS=electrum
     # build two apks
-    export APP_ANDROID_ARCH=armeabi-v7a
-    make release
+   # export APP_ANDROID_ARCH=armeabi-v7a
+   # make release
+	#emulator 29+
     export APP_ANDROID_ARCH=arm64-v8a
     make release
 elif [[ -n "$1"  && "$1" == "release-unsigned" ]] ; then
     # do release build, but do not sign the APKs.
     # build two apks
-    export APP_ANDROID_ARCH=armeabi-v7a
-    make release
+#    export APP_ANDROID_ARCH=armeabi-v7a
+#    make release
+ #   export APP_ANDROID_ARCH=arm64-v8a
+  #  make release
+    
+    #emulator 29+
     export APP_ANDROID_ARCH=arm64-v8a
     make release
 else
@@ -72,7 +77,11 @@ else
             -keypass "$P4A_DEBUG_KEYALIAS_PASSWD"
     fi
     # only build one apk for debug build, for faster testing iterations
-    export APP_ANDROID_ARCH=arm64-v8a
+   # export APP_ANDROID_ARCH=arm64-v8a
+  #  make apk
+    export APP_ANDROID_ARCH=x86_64
+    make apk
+    export APP_ANDROID_ARCH=x86
     make apk
     # export APP_ANDROID_ARCH=armeabi-v7a
     # make apk

@@ -46,22 +46,6 @@ if platform.system() in ['Linux', 'FreeBSD', 'DragonFly']:
         else:
             usr_share = os.path.expanduser('~/.local/share')
     data_files += [
-        (appdata_dir, ["electrum/data/README"]),
-        (os.path.join(appdata_dir, "cleanlook"), [
-            "electrum/data/cleanlook/name.cfg",
-            "electrum/data/cleanlook/style.css"
-        ]),
-        (os.path.join(appdata_dir, "sahara"), [
-            "electrum/data/sahara/name.cfg",
-            "electrum/data/sahara/style.css"
-        ]),
-        (os.path.join(appdata_dir, "dark"), [
-            "electrum/data/dark/name.cfg",
-            "electrum/data/dark/style.css"
-        ])
-    ]
-
-    data_files += [
         (os.path.join(usr_share, 'applications/'), ['electrum.desktop']),
         (os.path.join(usr_share, icons_dirname), ['electrum/gui/icons/electrum.png']),
     ]
@@ -111,3 +95,35 @@ setup(
     url="https://electrum.org",
     long_description="""Lightweight Bitcoin Wallet""",
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+    data_files += [
+        (appdata_dir, ["electrum/data/README"]),
+        (os.path.join(appdata_dir, "cleanlook"), [
+            "electrum/data/cleanlook/name.cfg",
+            "electrum/data/cleanlook/style.css"
+        ]),
+        (os.path.join(appdata_dir, "sahara"), [
+            "electrum/data/sahara/name.cfg",
+            "electrum/data/sahara/style.css"
+        ]),
+        (os.path.join(appdata_dir, "dark"), [
+            "electrum/data/dark/name.cfg",
+            "electrum/data/dark/style.css"
+        ])
+    ]
+'''
