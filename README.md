@@ -1,3 +1,6 @@
+for ElectrumX uraniumX (URX) server
+https://github.com/c4pt000/ElectrumX-server-UraniumX
+
 ```
 cd /usr/bin
 wget https://github.com/c4pt000/electrum-uraniumx/releases/download/electrum-uraniumx/electrum-uraniumx.tar.gz
