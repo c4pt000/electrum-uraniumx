@@ -152,11 +152,12 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
         grid.addWidget(self.extra_fee_label, 2+1, 0)
         grid.addWidget(self.extra_fee_value, 2+1, 1)
 
-        self.fee_slider = FeeSlider(self, self.config, self.fee_slider_callback)
-        self.fee_combo = FeeComboBox(self.fee_slider)
-        grid.addWidget(HelpLabel(_("Fee rate") + ": ", self.fee_combo.help_msg), 5+1, 0)
-        grid.addWidget(self.fee_slider, 5+1, 1)
-        grid.addWidget(self.fee_combo, 5+1, 2)
+       
+ #self.fee_slider = FeeSlider(self, self.config, self.fee_slider_callback)
+ #       self.fee_combo = FeeComboBox(self.fee_slider)
+  #      grid.addWidget(HelpLabel(_("Fee rate") + ": ", self.fee_combo.help_msg), 5+1, 0)
+   #     grid.addWidget(self.fee_slider, 5+1, 1)
+    #    grid.addWidget(self.fee_combo, 5+1, 2)
 
         self.message_label = QLabel(self.default_message())
         grid.addWidget(self.message_label, 6+1, 0, 1, -1)
@@ -166,9 +167,9 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
         self.pw.setVisible(self.password_required)
         grid.addWidget(self.pw_label, 8+1, 0)
         grid.addWidget(self.pw, 8+1, 1, 1, -1)
-        self.preview_button = QPushButton(_('Advanced'))
-        self.preview_button.clicked.connect(self.on_preview)
-        grid.addWidget(self.preview_button, 0, 2)
+       # self.preview_button = QPushButton(_('Advanced'))
+       # self.preview_button.clicked.connect(self.on_preview)
+       # grid.addWidget(self.preview_button, 0, 2)
         self.send_button = QPushButton(_('Send'))
         self.send_button.clicked.connect(self.on_send)
         self.send_button.setDefault(True)
@@ -269,13 +270,13 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
                 _("Try to raise your transaction fee, or use a server with a lower relay fee.")
             ])
             self.toggle_send_button(False, message=msg)
-        elif fee_ratio >= FEE_RATIO_HIGH_WARNING:
-            self.toggle_send_button(True,
-                                    message=_('Warning') + ': ' + _("The fee for this transaction seems unusually high.")
-                                            + f'\n({fee_ratio*100:.2f}% of amount)')
-        elif feerate > FEERATE_WARNING_HIGH_FEE / 1000:
-            self.toggle_send_button(True,
-                                    message=_('Warning') + ': ' + _("The fee for this transaction seems unusually high.")
-                                            + f'\n(feerate: {feerate:.2f} swartz/byte)')
+       # elif fee_ratio >= FEE_RATIO_HIGH_WARNING:
+       #     self.toggle_send_button(True,
+       #                             message=_('Warning') + ': ' + _("The fee for this transaction seems unusually high.")
+       #                                     + f'\n({fee_ratio*100:.2f}% of amount)')
+       # elif feerate > FEERATE_WARNING_HIGH_FEE / 1000:
+       #     self.toggle_send_button(True,
+       #                             message=_('Warning') + ': ' + _("The fee for this transaction seems unusually high.")
+       #                                     + f'\n(feerate: {feerate:.2f} geiger/byte)')
         else:
             self.toggle_send_button(True)
