@@ -711,7 +711,7 @@ def time_difference(distance_in_time, include_seconds):
         return "over %d years" % (round(distance_in_minutes / 525600))
 
 mainnet_block_explorers = {
-    'radioblockchain.info': ('http://radioblockchain.info/',
+    'explorer.uraniumx.org': ('https://explorer.uraniumx.org/',
                         {'tx': 'tx/', 'addr': 'address/'}),
 }
 
