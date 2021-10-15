@@ -3,7 +3,7 @@
 
 [Desktop Entry]
 Comment=Lightweight Radiocoin Client
-Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-radc %u"
+Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-urx %u"
 GenericName[en_US]=Radiocoin Wallet
 GenericName=Radiocoin Wallet
 Icon=electrum
@@ -18,5 +18,5 @@ MimeType=x-scheme-handler/radiocoin;
 Actions=Testnet;
 
 [Desktop Action Testnet]
-Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-radc --testnet %u"
+Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-urx --testnet %u"
 Name=Testnet mode

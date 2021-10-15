@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Electrum-RADC - lightweight Radiocoin client
+# Electrum-URX - lightweight Radiocoin client
 # Copyright (C) 2018 The Radiocoin developers
 #
 # License for all components not part of Electrum-DOGE:

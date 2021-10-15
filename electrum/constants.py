@@ -55,7 +55,7 @@ class AbstractNet:
         # chunk for the last checkpoint, because of the timewarp hardfork.  So
         # we artificially return one fewer checkpoint than is available.
         #
-        # It should be noted that this hack causes Electrum-RADC to need at
+        # It should be noted that this hack causes Electrum-URX to need at
         # least 2 checkpoints, whereas upstream Electrum only needs 1.
         #return max(0, len(cls.CHECKPOINTS) * 2016 - 1)
         return max(0, (len(cls.CHECKPOINTS)-1) * 2016 - 1)
@@ -68,13 +68,13 @@ class AbstractNet:
 class BitcoinMainnet(AbstractNet):
 
     TESTNET = False
-    WIF_PREFIX = 158
-    ADDRTYPE_P2PKH = 60
-    ADDRTYPE_P2SH = 22
-    SEGWIT_HRP = "radc"
+    WIF_PREFIX = 12
+    ADDRTYPE_P2PKH = 68
+    ADDRTYPE_P2SH = 115
+    SEGWIT_HRP = "urx"
 #   GENESIS = "000000000062b72c5e2ceb45fbc8587e807c155b0da735e6483dfba2f0a9c770"
-    GENESIS = "000007ce46e6c59844c34fa7ba5b27c8dac0653a27fcfb7340cc0158849e4afd"
-    DEFAULT_PORTS = {'t': '50001', 's': '50002'}
+    GENESIS = "6be1ade2619d1402571996e436b726c8b0bd72f10fdcae10cff5acd369118626"
+    DEFAULT_PORTS = {'t': '23800', 's': '23802'}
     DEFAULT_SERVERS = read_json('servers.json', {})
     CHECKPOINTS = read_json('', [])
     BLOCK_HEIGHT_FIRST_LIGHTNING_CHANNELS = 200
@@ -83,7 +83,7 @@ class BitcoinMainnet(AbstractNet):
 #BITCOIN_HEADER_PUB = "02facafd"
 
     XPRV_HEADERS = {
-        'standard':    0x02fac398,  # xprv
+        'standard':    0x0488ade4,  # xprv
 #        'p2wpkh-p2sh': 0x02fac398,  # yprv
 #        'p2wsh-p2sh':  0x02fac398,    # Yprv
 #        'p2wpkh':      0x02fac398,    # zprv
@@ -91,7 +91,7 @@ class BitcoinMainnet(AbstractNet):
     }
     XPRV_HEADERS_INV = inv_dict(XPRV_HEADERS)
     XPUB_HEADERS = {
-        'standard':    0x02facafd,  # xpub
+        'standard':    0x0488b21e,  # xpub
 #        'p2wpkh-p2sh': 0x02facafd,  # ypub
 #        'p2wsh-p2sh':  0x02facafd,  # Ypub
 #        'p2wpkh':      0x02facafd,  # zpub
@@ -111,7 +111,7 @@ class BitcoinMainnet(AbstractNet):
 'radiopool.me',
 ]
 
-    AUXPOW_CHAIN_ID = 0x00620004
+    AUXPOW_CHAIN_ID = 0x2000
     AUXPOW_START_HEIGHT = 0
 
     NAME_EXPIRATION = 60

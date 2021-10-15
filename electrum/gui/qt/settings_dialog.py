@@ -204,7 +204,7 @@ class SettingsDialog(WindowModalDialog):
         # units
         units = base_units_list
         msg = (_('Base unit of your wallet.')
-               + '\n1 RADC = 1000 mRADC. 1 mRADC = 1000 bits. 1 bit = 100 sat.\n'
+               + '\n1 URX = 1000 mURX. 1 mURX = 1000 bits. 1 bit = 100 sat.\n'
                + _('This setting affects the Send tab, and all balance related fields.'))
         unit_label = HelpLabel(_('Base unit') + ':', msg)
         unit_combo = QComboBox()

@@ -73,9 +73,9 @@ def inv_dict(d):
 ca_path = certifi.where()
 
 
-base_units = {'RADC':8, 'mRADC':5, 'uRADC':2, 'radiowaves':0}
+base_units = {'URX':8, 'mURX':5, 'uURX':2, 'geigers':0}
 base_units_inverse = inv_dict(base_units)
-base_units_list = ['RADC', 'mRADC', 'uRADC', 'radiowaves']  # list(dict) does not guarantee order
+base_units_list = ['URX', 'mURX', 'uURX', 'geigers']  # list(dict) does not guarantee order
 
 DECIMAL_POINT_DEFAULT = 5  # mBTC
 
@@ -431,7 +431,7 @@ def assert_datadir_available(config_path):
         return
     else:
         raise FileNotFoundError(
-            'Electrum-RADC datadir does not exist. Was it deleted while running?' + '\n' +
+            'Electrum-URX datadir does not exist. Was it deleted while running?' + '\n' +
             'Should be at {}'.format(path))
 
 
@@ -534,11 +534,11 @@ def user_dir():
     elif 'ANDROID_DATA' in os.environ:
         return android_data_dir()
     elif os.name == 'posix':
-        return os.path.join(os.environ["HOME"], ".electrum-radc")
+        return os.path.join(os.environ["HOME"], ".electrum-urx")
     elif "APPDATA" in os.environ:
-        return os.path.join(os.environ["APPDATA"], "Electrum-RADC")
+        return os.path.join(os.environ["APPDATA"], "Electrum-URX")
     elif "LOCALAPPDATA" in os.environ:
-        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-RADC")
+        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-URX")
     else:
         #raise Exception("No home directory found in environment variables.")
         return
@@ -763,12 +763,12 @@ def parse_URI(uri: str, on_pr: Callable = None, *, loop=None) -> dict:
 
     if ':' not in uri:
         if not bitcoin.is_address(uri):
-            raise InvalidBitcoinURI("Not a radiocoin address")
+            raise InvalidBitcoinURI("Not a uraniumx address")
         return {'address': uri}
 
     u = urllib.parse.urlparse(uri)
-    if u.scheme != 'radiocoin':
-        raise InvalidBitcoinURI("Not a radiocoin URI")
+    if u.scheme != 'uraniumx':
+        raise InvalidBitcoinURI("Not a uraniumx URI")
     address = u.path
 
     # python for android fails to parse query
@@ -785,7 +785,7 @@ def parse_URI(uri: str, on_pr: Callable = None, *, loop=None) -> dict:
     out = {k: v[0] for k, v in pq.items()}
     if address:
         if not bitcoin.is_address(address):
-            raise InvalidBitcoinURI(f"Invalid radiocoin address: {address}")
+            raise InvalidBitcoinURI(f"Invalid uraniumx address: {address}")
         out['address'] = address
     if 'amount' in out:
         am = out['amount']

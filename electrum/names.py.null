@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum-RADC - lightweight Radiocoin client
+# Electrum-URX - lightweight Radiocoin client
 # Copyright (C) 2018 Radiocoin Developers
 #
 # Permission is hereby granted, free of charge, to any person
