@@ -6,3 +6,4 @@
  cd electrum-radiocoin/
  python3 -m pip install cryptography
  python3 -m pip install . && ./run_electrum_radc 
+	echo "for electrum-uraniumx users close electrum-RADC for uraniumx run /opt/electrum-uraniumx/run_electrum for electurm-uraniumx instead"
