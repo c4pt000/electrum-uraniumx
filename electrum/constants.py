@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Electrum - lightweight Bitcoin client
+# Electrum - lightweight UraniumX client
 # Copyright (C) 2018 The Electrum developers
 #
 # Permission is hereby granted, free of charge, to any person
@@ -26,7 +26,7 @@
 import os
 import json
 
-from .util import inv_dict
+from .util import inv_dict, all_subclasses
 from . import bitcoin
 
 
@@ -40,48 +40,48 @@ def read_json(filename, default):
     return r
 
 
-GIT_REPO_URL = "https://github.com/namecoin/electrum-nmc"
-GIT_REPO_ISSUES_URL = "https://github.com/namecoin/electrum-nmc/issues"
+GIT_REPO_URL = "https://github.com/spesmilo/electrum"
+GIT_REPO_ISSUES_URL = "https://github.com/spesmilo/electrum/issues"
+BIP39_WALLET_FORMATS = read_json('bip39_wallet_formats.json', [])
 
 
 class AbstractNet:
 
-    BLOCK_HEIGHT_FIRST_LIGHTNING_CHANNELS = 100
+    NET_NAME: str
+    TESTNET: bool
+    WIF_PREFIX: int
+    ADDRTYPE_P2PKH: int
+    ADDRTYPE_P2SH: int
+    SEGWIT_HRP: str
+  #  BOLT11_HRP: str
+    GENESIS: str
+    BLOCK_HEIGHT_FIRST_LIGHTNING_CHANNELS: int = 0
+    BIP44_COIN_TYPE: int
+    LN_REALM_BYTE: int
 
     @classmethod
     def max_checkpoint(cls) -> int:
-        # Radiocoin: We can't actually fully use the last checkpoint, because
-        # verifying the chunk following the last checkpoint requires having the
-        # chunk for the last checkpoint, because of the timewarp hardfork.  So
-        # we artificially return one fewer checkpoint than is available.
-        #
-        # It should be noted that this hack causes Electrum-URX to need at
-        # least 2 checkpoints, whereas upstream Electrum only needs 1.
-        #return max(0, len(cls.CHECKPOINTS) * 2016 - 1)
-        return max(0, (len(cls.CHECKPOINTS)-1) * 2016 - 1)
+        return max(0, len(cls.CHECKPOINTS) * 2016 - 1)
 
     @classmethod
     def rev_genesis_bytes(cls) -> bytes:
         return bytes.fromhex(bitcoin.rev_hex(cls.GENESIS))
 
 
-class BitcoinMainnet(AbstractNet):
+class UraniumXMainnet(AbstractNet):
 
+    NET_NAME = "mainnet"
     TESTNET = False
     WIF_PREFIX = 12
     ADDRTYPE_P2PKH = 68
     ADDRTYPE_P2SH = 115
     SEGWIT_HRP = "urx"
-#   GENESIS = "000000000062b72c5e2ceb45fbc8587e807c155b0da735e6483dfba2f0a9c770"
+ #   BOLT11_HRP = SEGWIT_HRP
     GENESIS = "6be1ade2619d1402571996e436b726c8b0bd72f10fdcae10cff5acd369118626"
     DEFAULT_PORTS = {'t': '23800', 's': '23802'}
     DEFAULT_SERVERS = read_json('servers.json', {})
     CHECKPOINTS = read_json('', [])
     BLOCK_HEIGHT_FIRST_LIGHTNING_CHANNELS = 200
-
-#BITCOIN_HEADER_PRIV = "02fac398"
-#BITCOIN_HEADER_PUB = "02facafd"
-
     XPRV_HEADERS = {
         'standard':    0x0488ade4,  # xprv
 #        'p2wpkh-p2sh': 0x02fac398,  # yprv
@@ -98,12 +98,7 @@ class BitcoinMainnet(AbstractNet):
 #        'p2wsh':       0x02facafd,  # Zpub
     }
     XPUB_HEADERS_INV = inv_dict(XPUB_HEADERS)
-#    BIP44_COIN_TYPE = 1
 
-#namecoin
-#   BIP44_COIN_TYPE = 7
-
-# dogecoin
     BIP44_COIN_TYPE = 1
     LN_REALM_BYTE = 0
     LN_DNS_SEEDS = [
@@ -111,89 +106,101 @@ class BitcoinMainnet(AbstractNet):
 'radiopool.me',
 ]
 
-    AUXPOW_CHAIN_ID = 0x2000
-    AUXPOW_START_HEIGHT = 0
 
-    NAME_EXPIRATION = 60
+class UraniumXTestnet(AbstractNet):
 
-
-class BitcoinTestnet(AbstractNet):
-
+    NET_NAME = "testnet"
     TESTNET = True
-    WIF_PREFIX = 239
+    WIF_PREFIX = 0xef
     ADDRTYPE_P2PKH = 111
     ADDRTYPE_P2SH = 196
-    SEGWIT_HRP = "xradc"
-    GENESIS = "00000a2ee9363d21e47bc10d5b1e39d4ae4bd950491790e522f90dad86d2d1eb"
-#    GENESIS = "00000007199508e34a9ff81e6ec0c477a4cccff2a4767a8eee39c11db367b008"
+    SEGWIT_HRP = "tb"
+    BOLT11_HRP = SEGWIT_HRP
+    GENESIS = "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"
     DEFAULT_PORTS = {'t': '51001', 's': '51002'}
     DEFAULT_SERVERS = read_json('servers_testnet.json', {})
     CHECKPOINTS = read_json('checkpoints_testnet.json', [])
+
     XPRV_HEADERS = {
         'standard':    0x04358394,  # tprv
-#        'p2wpkh-p2sh': 0x044a4e28,  # uprv
-#        'p2wsh-p2sh':  0x024285b5,  # Uprv
-#        'p2wpkh':      0x045f18bc,  # vprv
-#        'p2wsh':       0x02575048,  # Vprv
+        'p2wpkh-p2sh': 0x044a4e28,  # uprv
+        'p2wsh-p2sh':  0x024285b5,  # Uprv
+        'p2wpkh':      0x045f18bc,  # vprv
+        'p2wsh':       0x02575048,  # Vprv
     }
     XPRV_HEADERS_INV = inv_dict(XPRV_HEADERS)
     XPUB_HEADERS = {
         'standard':    0x043587cf,  # tpub
-#        'p2wpkh-p2sh': 0x044a5262,  # upub
-#        'p2wsh-p2sh':  0x024289ef,  # Upub
-#        'p2wpkh':      0x045f1cf6,  # vpub
-#        'p2wsh':       0x02575483,  # Vpub
+        'p2wpkh-p2sh': 0x044a5262,  # upub
+        'p2wsh-p2sh':  0x024289ef,  # Upub
+        'p2wpkh':      0x045f1cf6,  # vpub
+        'p2wsh':       0x02575483,  # Vpub
     }
     XPUB_HEADERS_INV = inv_dict(XPUB_HEADERS)
-    BIP44_COIN_TYPE = 3
+    BIP44_COIN_TYPE = 1
     LN_REALM_BYTE = 1
-    LN_DNS_SEEDS = []
-
-    AUXPOW_CHAIN_ID = 0x0062
-    AUXPOW_START_HEIGHT = 200
-
-    NAME_EXPIRATION = 36000
+    LN_DNS_SEEDS = [  # TODO investigate this again
+        #'test.nodes.lightning.directory.',  # times out.
+        #'lseed.bitcoinstats.com.',  # ignores REALM byte and returns mainnet peers...
+    ]
 
 
-class BitcoinRegtest(BitcoinTestnet):
+class UraniumXRegtest(UraniumXTestnet):
 
-    SEGWIT_HRP = "ncrt"
+    NET_NAME = "regtest"
+    SEGWIT_HRP = "bcrt"
+    BOLT11_HRP = SEGWIT_HRP
     GENESIS = "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"
     DEFAULT_SERVERS = read_json('servers_regtest.json', {})
     CHECKPOINTS = []
     LN_DNS_SEEDS = []
 
-    NAME_EXPIRATION = 30
 
+class UraniumXSimnet(UraniumXTestnet):
 
-class BitcoinSimnet(BitcoinTestnet):
-
+    NET_NAME = "simnet"
     WIF_PREFIX = 0x64
     ADDRTYPE_P2PKH = 0x3f
     ADDRTYPE_P2SH = 0x7b
     SEGWIT_HRP = "sb"
+    BOLT11_HRP = SEGWIT_HRP
     GENESIS = "683e86bd5c6d110d91b94b97137ba6bfe02dbbdb8e3dff722a669b5d69d77af6"
     DEFAULT_SERVERS = read_json('servers_regtest.json', {})
     CHECKPOINTS = []
     LN_DNS_SEEDS = []
 
 
+class UraniumXSignet(UraniumXTestnet):
+
+    NET_NAME = "signet"
+    BOLT11_HRP = "tbs"
+    GENESIS = "00000008819873e925422c1ff0f99f7cc9bbb232af63a077a480a3633bee1ef6"
+    DEFAULT_SERVERS = read_json('servers_signet.json', {})
+    CHECKPOINTS = []
+    LN_DNS_SEEDS = []
+
+
+NETS_LIST = tuple(all_subclasses(AbstractNet))
+
 # don't import net directly, import the module instead (so that net is singleton)
-net = BitcoinMainnet
+net = UraniumXMainnet
+
+def set_signet():
+    global net
+    net = UraniumXSignet
 
 def set_simnet():
     global net
-    net = BitcoinSimnet
+    net = UraniumXSimnet
 
 def set_mainnet():
     global net
-    net = BitcoinMainnet
+    net = UraniumXMainnet
 
 def set_testnet():
     global net
-    net = BitcoinTestnet
-
+    net = UraniumXTestnet
 
 def set_regtest():
     global net
-    net = BitcoinRegtest
+    net = UraniumXRegtest

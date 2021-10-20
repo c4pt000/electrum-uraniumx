@@ -15,9 +15,9 @@ from electrum.invoices import (PR_TYPE_ONCHAIN, PR_TYPE_LN, PR_DEFAULT_EXPIRATIO
                                LNInvoice, pr_expiration_values, Invoice, OnchainInvoice)
 from electrum import bitcoin, constants
 from electrum.transaction import tx_from_any, PartialTxOutput
-from electrum.util import (parse_URI, InvalidBitcoinURI, TxMinedInfo, maybe_extract_bolt11_invoice,
-                           InvoiceError, format_time)
-from electrum.lnaddr import lndecode
+from electrum.util import (parse_URI, InvalidUraniumXURI, TxMinedInfo, maybe_extract_bolt11_invoice,
+                           InvoiceError, format_time, parse_max_spend)
+from electrum.lnaddr import lndecode, LnInvoiceException
 from electrum.logging import Logger
 
 from .dialogs.confirm_tx_dialog import ConfirmTxDialog
@@ -170,6 +170,15 @@ class SendScreen(CScreen, Logger):
     def set_URI(self, text: str):
         if not self.app.wallet:
             return
+        # interpret as lighting URI
+        bolt11_invoice = maybe_extract_bolt11_invoice(text)
+        if bolt11_invoice:
+            self.set_ln_invoice(bolt11_invoice)
+        # interpret as BIP21 URI
+        else:
+            self.set_bip21(text)
+
+    def set_bip21(self, text: str):
         try:
             uri = parse_URI(text, self.app.on_pr, loop=self.app.asyncio_loop)
         except InvalidUraniumXURI as e:
@@ -188,8 +197,8 @@ class SendScreen(CScreen, Logger):
         try:
             invoice = str(invoice).lower()
             lnaddr = lndecode(invoice)
-        except Exception as e:
-            self.app.show_info(invoice + _(" is not a valid Lightning invoice: ") + repr(e)) # repr because str(Exception()) == ''
+        except LnInvoiceException as e:
+            self.app.show_info(_("Invoice is not a valid Lightning invoice: ") + repr(e)) # repr because str(Exception()) == ''
             return
         self.address = invoice
         self.message = dict(lnaddr.tags).get('d', None)
@@ -200,10 +209,10 @@ class SendScreen(CScreen, Logger):
     def update(self):
         if self.app.wallet is None:
             return
-      #  _list = self.app.wallet.get_unpaid_invoices()
-       # _list.reverse()
+        _list = self.app.wallet.get_unpaid_invoices()
+        _list.reverse()
         payments_container = self.ids.payments_container
-#        payments_container.data = [self.get_card(invoice) for invoice in _list]
+        payments_container.data = [self.get_card(invoice) for invoice in _list]
 
     def update_item(self, key, invoice):
         payments_container = self.ids.payments_container
@@ -362,7 +371,7 @@ class SendScreen(CScreen, Logger):
 
     def _do_pay_onchain(self, invoice: OnchainInvoice) -> None:
         outputs = invoice.outputs
-        amount = sum(map(lambda x: x.value, outputs)) if '!' not in [x.value for x in outputs] else '!'
+        amount = sum(map(lambda x: x.value, outputs)) if not any(parse_max_spend(x.value) for x in outputs) else '!'
         coins = self.app.wallet.get_spendable_coins(None)
         make_tx = lambda rbf: self.app.wallet.make_unsigned_transaction(coins=coins, outputs=outputs, rbf=rbf)
         on_pay = lambda tx: self.app.protected(_('Send payment?'), self.send_tx, (tx, invoice))
@@ -486,10 +495,10 @@ class ReceiveScreen(CScreen):
     def update(self):
         if self.app.wallet is None:
             return
-#        _list = self.app.wallet.get_unpaid_requests()
- #       _list.reverse()
+        _list = self.app.wallet.get_unpaid_requests()
+        _list.reverse()
         requests_container = self.ids.requests_container
-#        requests_container.data = [self.get_card(item) for item in _list]
+        requests_container.data = [self.get_card(item) for item in _list]
 
     def update_item(self, key, request):
         payments_container = self.ids.requests_container

@@ -172,7 +172,7 @@
     "Bitbank": [
         "JPY"
     ],
-    "BitcoinAverage": [
+    "UraniumXAverage": [
         "AED",
         "AFN",
         "ALL",
@@ -341,7 +341,7 @@
         "ZMW",
         "ZWL"
     ],
-    "BitcoinVenezuela": [
+    "UraniumXVenezuela": [
         "ARS",
         "ETH",
         "EUR",
@@ -350,7 +350,7 @@
         "VEF",
         "XMR"
     ],
-    "Bitcointoyou": [
+    "UraniumXtoyou": [
         "BRL"
     ],
     "Bitso": [
@@ -803,7 +803,7 @@
         "JPY",
         "USD"
     ],
-    "LocalBitcoins": [
+    "LocalUraniumXs": [
         "AED",
         "ARS",
         "AUD",
@@ -882,7 +882,7 @@
         "XRP",
         "ZAR"
     ],
-    "MercadoBitcoin": [
+    "MercadoUraniumX": [
         "BRL"
     ],
     "TheRockTrading": [

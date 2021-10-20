@@ -12,13 +12,13 @@ from typing import TYPE_CHECKING, Optional, Union, Callable, Sequence
 from electrum.storage import WalletStorage, StorageReadWriteError
 from electrum.wallet_db import WalletDB
 from electrum.wallet import Wallet, InternalAddressCorruption, Abstract_Wallet
-#from electrum.wallet import update_password_for_directory
+from electrum.wallet import update_password_for_directory
 
 from electrum.plugin import run_hook
 from electrum import util
 from electrum.util import (profiler, InvalidPassword, send_exception_to_crash_reporter,
                            format_satoshis, format_satoshis_plain, format_fee_satoshis,
-                           maybe_extract_bolt11_invoice)
+                           maybe_extract_bolt11_invoice, parse_max_spend)
 from electrum.invoices import PR_PAID, PR_FAILED
 from electrum import blockchain
 from electrum.network import Network, TxBroadcastError, BestEffortRequestFailed
@@ -28,6 +28,7 @@ from electrum.bitcoin import COIN
 
 from electrum.gui import messages
 from .i18n import _
+from .util import get_default_language
 from . import KIVY_GUI_PATH
 
 from kivy.app import App
@@ -84,12 +85,12 @@ Label.register(
 )
 
 
-#                           BITCOIN_BIP21_URI_SCHEME, LIGHTNING_URI_SCHEME,
 from electrum.util import (NoDynamicFeeEstimates, NotEnoughFunds,
+                           BITCOIN_BIP21_URI_SCHEME, LIGHTNING_URI_SCHEME,
                            UserFacingException)
 
-#from .uix.dialogs.lightning_open_channel import LightningOpenChannelDialog
-#from .uix.dialogs.lightning_channels import LightningChannelsDialog, SwapDialog
+from .uix.dialogs.lightning_open_channel import LightningOpenChannelDialog
+from .uix.dialogs.lightning_channels import LightningChannelsDialog, SwapDialog
 
 if TYPE_CHECKING:
     from . import ElectrumGui
@@ -116,22 +117,32 @@ class ElectrumWindow(App, Logger):
     is_fiat = BooleanProperty(False)
     blockchain_forkpoint = NumericProperty(0)
 
-  #  lightning_gossip_num_peers = NumericProperty(0)
-  
-#  lightning_gossip_num_nodes = NumericProperty(0)
- #   lightning_gossip_num_channels = NumericProperty(0)
-  #  lightning_gossip_num_queries = NumericProperty(0)
+    lightning_gossip_num_peers = NumericProperty(0)
+    lightning_gossip_num_nodes = NumericProperty(0)
+    lightning_gossip_num_channels = NumericProperty(0)
+    lightning_gossip_num_queries = NumericProperty(0)
 
     auto_connect = BooleanProperty(False)
     def on_auto_connect(self, instance, x):
+        if not self._init_finished:
+            return
         net_params = self.network.get_parameters()
         net_params = net_params._replace(auto_connect=self.auto_connect)
         self.network.run_from_another_thread(self.network.set_parameters(net_params))
+
+    def set_auto_connect(self, b: bool):
+        # This method makes sure we persist x into the config even if self.auto_connect == b.
+        # Note: on_auto_connect() only gets called if the value of the self.auto_connect property *changes*.
+        self.electrum_config.set_key('auto_connect', b)
+        self.auto_connect = b
+
     def toggle_auto_connect(self, x):
         self.auto_connect = not self.auto_connect
 
     oneserver = BooleanProperty(False)
     def on_oneserver(self, instance, x):
+        if not self._init_finished:
+            return
         net_params = self.network.get_parameters()
         net_params = net_params._replace(oneserver=self.oneserver)
         self.network.run_from_another_thread(self.network.set_parameters(net_params))
@@ -230,10 +241,8 @@ class ElectrumWindow(App, Logger):
     def on_new_intent(self, intent):
         data = str(intent.getDataString())
         scheme = str(intent.getScheme()).lower()
-        if scheme == BITCOIN_BIP21_URI_SCHEME:
+        if scheme == BITCOIN_BIP21_URI_SCHEME or scheme == LIGHTNING_URI_SCHEME:
             self.set_URI(data)
-        elif scheme == LIGHTNING_URI_SCHEME:
-            self.set_ln_invoice(data)
 
     def on_language(self, instance, language):
         self.logger.info('language: {}'.format(language))
@@ -374,6 +383,8 @@ class ElectrumWindow(App, Logger):
     :data:`ui_mode` is a read only `AliasProperty` Defaults to 'phone'
     '''
 
+    _init_finished = False
+
     def __init__(self, **kwargs):
         # initialize variables
         self._clipboard = Clipboard
@@ -392,7 +403,7 @@ class ElectrumWindow(App, Logger):
         Logger.__init__(self)
 
         self.electrum_config = config = kwargs.get('config', None)  # type: SimpleConfig
-        self.language = config.get('language', 'en')
+        self.language = config.get('language', get_default_language())
         self.network = network = kwargs.get('network', None)  # type: Network
         if self.network:
             self.num_blocks = self.network.get_local_height()
@@ -423,11 +434,13 @@ class ElectrumWindow(App, Logger):
 
         # cached dialogs
         self._settings_dialog = None
-     #   self._channels_dialog = None
+        self._channels_dialog = None
         self._addresses_dialog = None
-     #   self.set_fee_status()
+#        self.set_fee_status()
         self.invoice_popup = None
         self.request_popup = None
+
+        self._init_finished = True
 
     def on_pr(self, pr: 'PaymentRequest'):
         if not self.wallet:
@@ -457,9 +470,9 @@ class ElectrumWindow(App, Logger):
         if data.lower().startswith(BITCOIN_BIP21_URI_SCHEME + ':'):
             self.set_URI(data)
             return
-      #  if data.lower().startswith('channel_backup:'):
-       #     self.import_channel_backup(data)
-        #    return
+        if data.lower().startswith('channel_backup:'):
+            self.import_channel_backup(data)
+            return
         bolt11_invoice = maybe_extract_bolt11_invoice(data)
         if bolt11_invoice is not None:
             self.set_ln_invoice(bolt11_invoice)
@@ -629,35 +642,40 @@ class ElectrumWindow(App, Logger):
             interests = ['wallet_updated', 'network_updated', 'blockchain_updated',
                          'status', 'new_transaction', 'verified']
             util.register_callback(self.on_network_event, interests)
-#            util.register_callback(self.on_fee, ['fee'])
+            util.register_callback(self.on_fee, ['fee'])
             util.register_callback(self.on_fee_histogram, ['fee_histogram'])
             util.register_callback(self.on_quotes, ['on_quotes'])
             util.register_callback(self.on_history, ['on_history'])
-          #  util.register_callback(self.on_channels, ['channels_updated'])
-           # util.register_callback(self.on_channel, ['channel'])
+            util.register_callback(self.on_channels, ['channels_updated'])
+            util.register_callback(self.on_channel, ['channel'])
             util.register_callback(self.on_invoice_status, ['invoice_status'])
             util.register_callback(self.on_request_status, ['request_status'])
             util.register_callback(self.on_payment_failed, ['payment_failed'])
             util.register_callback(self.on_payment_succeeded, ['payment_succeeded'])
-       #     util.register_callback(self.on_channel_db, ['channel_db'])
+            util.register_callback(self.on_channel_db, ['channel_db'])
             util.register_callback(self.set_num_peers, ['gossip_peers'])
-#            util.register_callback(self.set_unknown_channels, ['unknown_channels'])
-        # load wallet
-        self.load_wallet_by_name(self.electrum_config.get_wallet_path(use_gui_last_wallet=True))
-        # URI passed in config
-        uri = self.electrum_config.get('url')
-        if uri:
-            self.set_URI(uri)
+            util.register_callback(self.set_unknown_channels, ['unknown_channels'])
+        
+        if self.network and self.electrum_config.get('auto_connect') is None:
+            self.popup_dialog("first_screen")
+            # load_wallet_on_start will be called later, after initial network setup is completed
+        else:
+            # load wallet
+            self.load_wallet_on_start()
+            # URI passed in config
+            uri = self.electrum_config.get('url')
+            if uri:
+                self.set_URI(uri)
 
-   # def on_channel_db(self, event, num_nodes, num_channels, num_policies):
-    #    self.lightning_gossip_num_nodes = num_nodes
-     #   self.lightning_gossip_num_channels = num_channels
+    def on_channel_db(self, event, num_nodes, num_channels, num_policies):
+        self.lightning_gossip_num_nodes = num_nodes
+        self.lightning_gossip_num_channels = num_channels
 
     def set_num_peers(self, event, num_peers):
         self.lightning_gossip_num_peers = num_peers
 
-   # def set_unknown_channels(self, event, unknown):
-    #    self.lightning_gossip_num_queries = unknown
+    def set_unknown_channels(self, event, unknown):
+        self.lightning_gossip_num_queries = unknown
 
     def get_wallet_path(self):
         if self.wallet:
@@ -693,6 +711,10 @@ class ElectrumWindow(App, Logger):
             return
         d = OpenWalletDialog(self, path, self.on_open_wallet)
         d.open()
+
+    def load_wallet_on_start(self):
+        """As part of app startup, try to load last wallet."""
+        self.load_wallet_by_name(self.electrum_config.get_wallet_path(use_gui_last_wallet=True))
 
     def on_open_wallet(self, password, storage):
         if not storage.file_exists():
@@ -732,18 +754,18 @@ class ElectrumWindow(App, Logger):
             self._settings_dialog.update()
         self._settings_dialog.open()
 
-#    def lightning_open_channel_dialog(self):
- #       if not self.wallet.has_lightning():
-  #          self.show_error(_('Lightning is not enabled for this wallet'))
-   #         return
-    #    if not self.wallet.lnworker.channels and not self.wallet.lnworker.channel_backups:
-     #       warning = _(messages.MSG_LIGHTNING_WARNING)
-      #      d = Question(_('Do you want to create your first channel?') +
-       #                  '\n\n' + warning, self.open_channel_dialog_with_warning)
-        #    d.open()
-    #    else:
-     #       d = LightningOpenChannelDialog(self)
-      #      d.open()
+    def lightning_open_channel_dialog(self):
+        if not self.wallet.has_lightning():
+            self.show_error(_('Lightning is not enabled for this wallet'))
+            return
+        if not self.wallet.lnworker.channels and not self.wallet.lnworker.channel_backups:
+            warning = _(messages.MSG_LIGHTNING_WARNING)
+            d = Question(_('Do you want to create your first channel?') +
+                         '\n\n' + warning, self.open_channel_dialog_with_warning)
+            d.open()
+        else:
+            d = LightningOpenChannelDialog(self)
+            d.open()
 
     def swap_dialog(self):
         d = SwapDialog(self, self.electrum_config)
@@ -754,18 +776,18 @@ class ElectrumWindow(App, Logger):
             d = LightningOpenChannelDialog(self)
             d.open()
 
- #   def lightning_channels_dialog(self):
-  #      if self._channels_dialog is None:
-   #         self._channels_dialog = LightningChannelsDialog(self)
-    #    self._channels_dialog.open()
+    def lightning_channels_dialog(self):
+        if self._channels_dialog is None:
+            self._channels_dialog = LightningChannelsDialog(self)
+        self._channels_dialog.open()
 
-  #  def on_channel(self, evt, wallet, chan):
-   #     if self._channels_dialog:
-    #        Clock.schedule_once(lambda dt: self._channels_dialog.update())
+    def on_channel(self, evt, wallet, chan):
+        if self._channels_dialog:
+            Clock.schedule_once(lambda dt: self._channels_dialog.update())
 
- #   def on_channels(self, evt, wallet):
-  #      if self._channels_dialog:
-   #         Clock.schedule_once(lambda dt: self._channels_dialog.update())
+    def on_channels(self, evt, wallet):
+        if self._channels_dialog:
+            Clock.schedule_once(lambda dt: self._channels_dialog.update())
 
     def is_wallet_creation_disabled(self):
         return bool(self.electrum_config.get('single_password')) and self.password is None
@@ -791,9 +813,9 @@ class ElectrumWindow(App, Logger):
                 ref.data = xpub
                 master_public_keys_layout.add_widget(ref)
             popup.open()
-    #    elif name == 'lightning_channels_dialog' and not self.wallet.can_have_lightning():
-     #       self.show_error(_("Not available for this wallet.") + "\n\n" +
-     #                       _("Lightning is currently restricted to HD wallets with p2wpkh addresses."))
+        elif name == 'lightning_channels_dialog' and not self.wallet.can_have_lightning():
+            self.show_error(_("Not available for this wallet.") + "\n\n" +
+                            _("Lightning is currently restricted to HD wallets with p2wpkh addresses."))
         elif name.endswith("_dialog"):
             getattr(self, name)()
         else:
@@ -967,8 +989,8 @@ class ElectrumWindow(App, Logger):
     def format_amount_and_units(self, x) -> str:
         if x is None:
             return 'none'
-        if x == '!':
-            return 'max'
+        if parse_max_spend(x):
+            return f'max({x})'
         # FIXME this is using format_satoshis_plain instead of config.format_amount
         #       as we sometimes convert the returned string back to numbers,
         #       via self.get_amount()... the need for converting back should be removed
@@ -1119,10 +1141,10 @@ class ElectrumWindow(App, Logger):
         else:
             self.show_error(f'Transaction not found {txid}')
 
-   # def lightning_tx_dialog(self, tx):
-    #    from .uix.dialogs.lightning_tx_dialog import LightningTxDialog
-     #   d = LightningTxDialog(self, tx)
-      #  d.open()
+    def lightning_tx_dialog(self, tx):
+        from .uix.dialogs.lightning_tx_dialog import LightningTxDialog
+        d = LightningTxDialog(self, tx)
+        d.open()
 
     def sign_tx(self, *args):
         threading.Thread(target=self._sign_tx, args=args).start()
@@ -1203,11 +1225,11 @@ class ElectrumWindow(App, Logger):
         fee_dialog.open()
 
     def set_fee_status(self):
-         target, tooltip, dyn = self.electrum_config.get_fee_target()
-#        self.fee_status = target
+#        target, tooltip, dyn = self.electrum_config.get_fee_target()
+        self.fee_status = target
 
-#    def on_fee(self, event, *arg):
-#       self.set_fee_status()
+    def on_fee(self, event, *arg):
+        self.set_fee_status()
 
     def protected(self, msg, f, args):
         if self.electrum_config.get('pin_code'):
@@ -1396,21 +1418,21 @@ class ElectrumWindow(App, Logger):
             self.logger.exception("failed to import backup")
             self.show_error("failed to import backup" + '\n' + str(e))
             return
-     #   self.lightning_channels_dialog()
+        self.lightning_channels_dialog()
 
-  #  def lightning_status(self):
-   #     if self.wallet.has_lightning():
-    #        if self.wallet.lnworker.has_deterministic_node_id():
-      #          status = _('Enabled')
-       #     else:
-        #        status = _('Enabled, non-recoverable channels')
-  #      else:
-   #         if self.wallet.can_have_lightning():
-    #            status = _('Not enabled')
-     #       else:
-      #          status = _("Not available for this wallet.")
-       # return status
-'''
+    def lightning_status(self):
+        if self.wallet.has_lightning():
+            if self.wallet.lnworker.has_deterministic_node_id():
+                status = _('Enabled')
+            else:
+                status = _('Enabled, non-recoverable channels')
+        else:
+            if self.wallet.can_have_lightning():
+                status = _('Not enabled')
+            else:
+                status = _("Not available for this wallet.")
+        return status
+
     def on_lightning_status(self, root):
         if self.wallet.has_lightning():
             if self.wallet.lnworker.has_deterministic_node_id():
@@ -1444,4 +1466,3 @@ class ElectrumWindow(App, Logger):
             return
         self.wallet.init_lightning(password=self.password)
         self.show_info(_('Lightning keys have been initialized.'))
-'''

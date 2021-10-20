@@ -88,42 +88,10 @@ setup(
     include_package_data=True,
     scripts=['electrum/electrum'],
     data_files=data_files,
-    description="Lightweight Bitcoin Wallet",
+    description="Lightweight UraniumX Wallet",
     author="Thomas Voegtlin",
     author_email="thomasv@electrum.org",
     license="MIT Licence",
     url="https://electrum.org",
-    long_description="""Lightweight Bitcoin Wallet""",
+    long_description="""Lightweight UraniumX Wallet""",
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-    data_files += [
-        (appdata_dir, ["electrum/data/README"]),
-        (os.path.join(appdata_dir, "cleanlook"), [
-            "electrum/data/cleanlook/name.cfg",
-            "electrum/data/cleanlook/style.css"
-        ]),
-        (os.path.join(appdata_dir, "sahara"), [
-            "electrum/data/sahara/name.cfg",
-            "electrum/data/sahara/style.css"
-        ]),
-        (os.path.join(appdata_dir, "dark"), [
-            "electrum/data/dark/name.cfg",
-            "electrum/data/dark/style.css"
-        ])
-    ]
-'''

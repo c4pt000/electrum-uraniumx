@@ -2,21 +2,21 @@
 # sudo desktop-file-install electrum.desktop
 
 [Desktop Entry]
-Comment=Lightweight Radiocoin Client
-Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-urx %u"
-GenericName[en_US]=Radiocoin Wallet
-GenericName=Radiocoin Wallet
+Comment=Lightweight UraniumX Client
+Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"
+GenericName[en_US]=UraniumX Wallet
+GenericName=UraniumX Wallet
 Icon=electrum
-Name[en_US]=Electrum Radiocoin Wallet
-Name=Electrum Radiocoin Wallet
+Name[en_US]=Electrum UraniumX Wallet
+Name=Electrum UraniumX Wallet
 Categories=Finance;Network;
 StartupNotify=true
 StartupWMClass=electrum
 Terminal=false
 Type=Application
-MimeType=x-scheme-handler/radiocoin;
+MimeType=x-scheme-handler/bitcoin;x-scheme-handler/lightning;
 Actions=Testnet;
 
 [Desktop Action Testnet]
-Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-urx --testnet %u"
+Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"
 Name=Testnet mode
