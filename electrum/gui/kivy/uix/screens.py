@@ -172,7 +172,7 @@ class SendScreen(CScreen, Logger):
             return
         try:
             uri = parse_URI(text, self.app.on_pr, loop=self.app.asyncio_loop)
-        except InvalidBitcoinURI as e:
+        except InvalidUraniumXURI as e:
             self.app.show_info(_("Error parsing URI") + f":\n{e}")
             return
         self.parsed_URI = uri
@@ -288,7 +288,7 @@ class SendScreen(CScreen, Logger):
     def read_invoice(self):
         address = str(self.address)
         if not address:
-            self.app.show_error(_('Recipient not specified.') + ' ' + _('Please scan a Bitcoin address or a payment request'))
+            self.app.show_error(_('Recipient not specified.') + ' ' + _('Please scan a UraniumX address or a payment request'))
             return
         if not self.amount:
             self.app.show_error(_('Please enter an amount'))
@@ -310,7 +310,7 @@ class SendScreen(CScreen, Logger):
                     outputs = self.payment_request.get_outputs()
                 else:
                     if not bitcoin.is_address(address):
-                        self.app.show_error(_('Invalid Bitcoin Address') + ':\n' + address)
+                        self.app.show_error(_('Invalid UraniumX Address') + ':\n' + address)
                         return
                     outputs = [PartialTxOutput.from_address_and_value(address, amount)]
                 return self.app.wallet.create_invoice(
