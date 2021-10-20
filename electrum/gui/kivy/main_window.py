@@ -208,9 +208,9 @@ class ElectrumWindow(App, Logger):
     def on_use_unconfirmed(self, instance, x):
         self.electrum_config.set_key('confirmed_only', not self.use_unconfirmed, True)
 
-  #  use_recoverable_channels = BooleanProperty(True)
-   # def on_use_recoverable_channels(self, instance, x):
-    #    self.electrum_config.set_key('use_recoverable_channels', self.use_recoverable_channels, True)
+    use_recoverable_channels = BooleanProperty(True)
+    def on_use_recoverable_channels(self, instance, x):
+        self.electrum_config.set_key('use_recoverable_channels', self.use_recoverable_channels, True)
 
     def switch_to_send_screen(func):
         # try until send_screen is available
@@ -629,7 +629,7 @@ class ElectrumWindow(App, Logger):
             interests = ['wallet_updated', 'network_updated', 'blockchain_updated',
                          'status', 'new_transaction', 'verified']
             util.register_callback(self.on_network_event, interests)
-            util.register_callback(self.on_fee, ['fee'])
+#            util.register_callback(self.on_fee, ['fee'])
             util.register_callback(self.on_fee_histogram, ['fee_histogram'])
             util.register_callback(self.on_quotes, ['on_quotes'])
             util.register_callback(self.on_history, ['on_history'])
@@ -754,18 +754,18 @@ class ElectrumWindow(App, Logger):
             d = LightningOpenChannelDialog(self)
             d.open()
 
-    def lightning_channels_dialog(self):
-        if self._channels_dialog is None:
-            self._channels_dialog = LightningChannelsDialog(self)
-        self._channels_dialog.open()
+ #   def lightning_channels_dialog(self):
+  #      if self._channels_dialog is None:
+   #         self._channels_dialog = LightningChannelsDialog(self)
+    #    self._channels_dialog.open()
 
-    def on_channel(self, evt, wallet, chan):
-        if self._channels_dialog:
-            Clock.schedule_once(lambda dt: self._channels_dialog.update())
+  #  def on_channel(self, evt, wallet, chan):
+   #     if self._channels_dialog:
+    #        Clock.schedule_once(lambda dt: self._channels_dialog.update())
 
-    def on_channels(self, evt, wallet):
-        if self._channels_dialog:
-            Clock.schedule_once(lambda dt: self._channels_dialog.update())
+ #   def on_channels(self, evt, wallet):
+  #      if self._channels_dialog:
+   #         Clock.schedule_once(lambda dt: self._channels_dialog.update())
 
     def is_wallet_creation_disabled(self):
         return bool(self.electrum_config.get('single_password')) and self.password is None
@@ -791,9 +791,9 @@ class ElectrumWindow(App, Logger):
                 ref.data = xpub
                 master_public_keys_layout.add_widget(ref)
             popup.open()
-        elif name == 'lightning_channels_dialog' and not self.wallet.can_have_lightning():
-            self.show_error(_("Not available for this wallet.") + "\n\n" +
-                            _("Lightning is currently restricted to HD wallets with p2wpkh addresses."))
+    #    elif name == 'lightning_channels_dialog' and not self.wallet.can_have_lightning():
+     #       self.show_error(_("Not available for this wallet.") + "\n\n" +
+     #                       _("Lightning is currently restricted to HD wallets with p2wpkh addresses."))
         elif name.endswith("_dialog"):
             getattr(self, name)()
         else:
@@ -1119,10 +1119,10 @@ class ElectrumWindow(App, Logger):
         else:
             self.show_error(f'Transaction not found {txid}')
 
-    def lightning_tx_dialog(self, tx):
-        from .uix.dialogs.lightning_tx_dialog import LightningTxDialog
-        d = LightningTxDialog(self, tx)
-        d.open()
+   # def lightning_tx_dialog(self, tx):
+    #    from .uix.dialogs.lightning_tx_dialog import LightningTxDialog
+     #   d = LightningTxDialog(self, tx)
+      #  d.open()
 
     def sign_tx(self, *args):
         threading.Thread(target=self._sign_tx, args=args).start()
@@ -1203,11 +1203,11 @@ class ElectrumWindow(App, Logger):
         fee_dialog.open()
 
     def set_fee_status(self):
-        target, tooltip, dyn = self.electrum_config.get_fee_target()
-        self.fee_status = target
+         target, tooltip, dyn = self.electrum_config.get_fee_target()
+#        self.fee_status = target
 
-    def on_fee(self, event, *arg):
-        self.set_fee_status()
+#    def on_fee(self, event, *arg):
+#       self.set_fee_status()
 
     def protected(self, msg, f, args):
         if self.electrum_config.get('pin_code'):
@@ -1396,21 +1396,21 @@ class ElectrumWindow(App, Logger):
             self.logger.exception("failed to import backup")
             self.show_error("failed to import backup" + '\n' + str(e))
             return
-        self.lightning_channels_dialog()
+     #   self.lightning_channels_dialog()
 
-    def lightning_status(self):
-        if self.wallet.has_lightning():
-            if self.wallet.lnworker.has_deterministic_node_id():
-                status = _('Enabled')
-            else:
-                status = _('Enabled, non-recoverable channels')
-        else:
-            if self.wallet.can_have_lightning():
-                status = _('Not enabled')
-            else:
-                status = _("Not available for this wallet.")
-        return status
-
+  #  def lightning_status(self):
+   #     if self.wallet.has_lightning():
+    #        if self.wallet.lnworker.has_deterministic_node_id():
+      #          status = _('Enabled')
+       #     else:
+        #        status = _('Enabled, non-recoverable channels')
+  #      else:
+   #         if self.wallet.can_have_lightning():
+    #            status = _('Not enabled')
+     #       else:
+      #          status = _("Not available for this wallet.")
+       # return status
+'''
     def on_lightning_status(self, root):
         if self.wallet.has_lightning():
             if self.wallet.lnworker.has_deterministic_node_id():
@@ -1444,3 +1444,4 @@ class ElectrumWindow(App, Logger):
             return
         self.wallet.init_lightning(password=self.password)
         self.show_info(_('Lightning keys have been initialized.'))
+'''

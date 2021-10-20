@@ -203,7 +203,7 @@ class SendScreen(CScreen, Logger):
       #  _list = self.app.wallet.get_unpaid_invoices()
        # _list.reverse()
         payments_container = self.ids.payments_container
-        payments_container.data = [self.get_card(invoice) for invoice in _list]
+#        payments_container.data = [self.get_card(invoice) for invoice in _list]
 
     def update_item(self, key, invoice):
         payments_container = self.ids.payments_container

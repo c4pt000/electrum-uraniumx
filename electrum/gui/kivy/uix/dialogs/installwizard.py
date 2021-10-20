@@ -880,7 +880,7 @@ class RestoreSeedDialog(WizardDialog):
         self.ids.text_input_seed.text = ''
         self.message = _('Please type your seed phrase using the virtual keyboard.')
         self.title = _('Enter Seed')
-        self.opt_ext = kwargs['opt_ext']
+#        self.opt_ext = kwargs['opt_ext']
         self.opt_bip39 = kwargs['opt_bip39']
         self.is_ext = False
         self.is_bip39 = False
@@ -1003,7 +1003,7 @@ class ConfirmSeedDialog(RestoreSeedDialog):
     def __init__(self, *args, **kwargs):
         RestoreSeedDialog.__init__(self, *args, **kwargs)
         self.ids.seed_dialog_header.ids.options_button.disabled = True
-        self.ids.text_input_seed.text = kwargs['seed']
+#        self.ids.text_input_seed.text = kwargs['seed']
 
     def get_params(self, b):
         return (self.get_text(),)
@@ -1107,12 +1107,12 @@ class InstallWizard(BaseWizard, Widget):
         kwargs['title'] = _('Confirm Seed')
         kwargs['message'] = _('Please retype your seed phrase, to confirm that you properly saved it')
         kwargs['opt_bip39'] = self.opt_bip39
-        kwargs['opt_ext'] = self.opt_ext
+#        kwargs['opt_ext'] = self.opt_ext
         ConfirmSeedDialog(self, **kwargs).open()
 
     def restore_seed_dialog(self, **kwargs):
         kwargs['opt_bip39'] = self.opt_bip39
-        kwargs['opt_ext'] = self.opt_ext
+ #       kwargs['opt_ext'] = self.opt_ext
         RestoreSeedDialog(self, **kwargs).open()
 
     def confirm_dialog(self, **kwargs):
