@@ -88,8 +88,8 @@ Label.register(
 from electrum.util import (NoDynamicFeeEstimates, NotEnoughFunds,
                            UserFacingException)
 
-from .uix.dialogs.lightning_open_channel import LightningOpenChannelDialog
-from .uix.dialogs.lightning_channels import LightningChannelsDialog, SwapDialog
+#from .uix.dialogs.lightning_open_channel import LightningOpenChannelDialog
+#from .uix.dialogs.lightning_channels import LightningChannelsDialog, SwapDialog
 
 if TYPE_CHECKING:
     from . import ElectrumGui
@@ -116,10 +116,11 @@ class ElectrumWindow(App, Logger):
     is_fiat = BooleanProperty(False)
     blockchain_forkpoint = NumericProperty(0)
 
-    lightning_gossip_num_peers = NumericProperty(0)
-    lightning_gossip_num_nodes = NumericProperty(0)
-    lightning_gossip_num_channels = NumericProperty(0)
-    lightning_gossip_num_queries = NumericProperty(0)
+  #  lightning_gossip_num_peers = NumericProperty(0)
+  
+#  lightning_gossip_num_nodes = NumericProperty(0)
+ #   lightning_gossip_num_channels = NumericProperty(0)
+  #  lightning_gossip_num_queries = NumericProperty(0)
 
     auto_connect = BooleanProperty(False)
     def on_auto_connect(self, instance, x):
@@ -207,9 +208,9 @@ class ElectrumWindow(App, Logger):
     def on_use_unconfirmed(self, instance, x):
         self.electrum_config.set_key('confirmed_only', not self.use_unconfirmed, True)
 
-    use_recoverable_channels = BooleanProperty(True)
-    def on_use_recoverable_channels(self, instance, x):
-        self.electrum_config.set_key('use_recoverable_channels', self.use_recoverable_channels, True)
+  #  use_recoverable_channels = BooleanProperty(True)
+   # def on_use_recoverable_channels(self, instance, x):
+    #    self.electrum_config.set_key('use_recoverable_channels', self.use_recoverable_channels, True)
 
     def switch_to_send_screen(func):
         # try until send_screen is available
@@ -422,9 +423,9 @@ class ElectrumWindow(App, Logger):
 
         # cached dialogs
         self._settings_dialog = None
-        self._channels_dialog = None
+     #   self._channels_dialog = None
         self._addresses_dialog = None
-#        self.set_fee_status()
+     #   self.set_fee_status()
         self.invoice_popup = None
         self.request_popup = None
 
@@ -456,9 +457,9 @@ class ElectrumWindow(App, Logger):
         if data.lower().startswith(BITCOIN_BIP21_URI_SCHEME + ':'):
             self.set_URI(data)
             return
-        if data.lower().startswith('channel_backup:'):
-            self.import_channel_backup(data)
-            return
+      #  if data.lower().startswith('channel_backup:'):
+       #     self.import_channel_backup(data)
+        #    return
         bolt11_invoice = maybe_extract_bolt11_invoice(data)
         if bolt11_invoice is not None:
             self.set_ln_invoice(bolt11_invoice)
@@ -632,15 +633,15 @@ class ElectrumWindow(App, Logger):
             util.register_callback(self.on_fee_histogram, ['fee_histogram'])
             util.register_callback(self.on_quotes, ['on_quotes'])
             util.register_callback(self.on_history, ['on_history'])
-            util.register_callback(self.on_channels, ['channels_updated'])
-            util.register_callback(self.on_channel, ['channel'])
+          #  util.register_callback(self.on_channels, ['channels_updated'])
+           # util.register_callback(self.on_channel, ['channel'])
             util.register_callback(self.on_invoice_status, ['invoice_status'])
             util.register_callback(self.on_request_status, ['request_status'])
             util.register_callback(self.on_payment_failed, ['payment_failed'])
             util.register_callback(self.on_payment_succeeded, ['payment_succeeded'])
-            util.register_callback(self.on_channel_db, ['channel_db'])
+       #     util.register_callback(self.on_channel_db, ['channel_db'])
             util.register_callback(self.set_num_peers, ['gossip_peers'])
-            util.register_callback(self.set_unknown_channels, ['unknown_channels'])
+#            util.register_callback(self.set_unknown_channels, ['unknown_channels'])
         # load wallet
         self.load_wallet_by_name(self.electrum_config.get_wallet_path(use_gui_last_wallet=True))
         # URI passed in config
@@ -648,15 +649,15 @@ class ElectrumWindow(App, Logger):
         if uri:
             self.set_URI(uri)
 
-    def on_channel_db(self, event, num_nodes, num_channels, num_policies):
-        self.lightning_gossip_num_nodes = num_nodes
-        self.lightning_gossip_num_channels = num_channels
+   # def on_channel_db(self, event, num_nodes, num_channels, num_policies):
+    #    self.lightning_gossip_num_nodes = num_nodes
+     #   self.lightning_gossip_num_channels = num_channels
 
     def set_num_peers(self, event, num_peers):
         self.lightning_gossip_num_peers = num_peers
 
-    def set_unknown_channels(self, event, unknown):
-        self.lightning_gossip_num_queries = unknown
+   # def set_unknown_channels(self, event, unknown):
+    #    self.lightning_gossip_num_queries = unknown
 
     def get_wallet_path(self):
         if self.wallet:
@@ -731,18 +732,18 @@ class ElectrumWindow(App, Logger):
             self._settings_dialog.update()
         self._settings_dialog.open()
 
-    def lightning_open_channel_dialog(self):
-        if not self.wallet.has_lightning():
-            self.show_error(_('Lightning is not enabled for this wallet'))
-            return
-        if not self.wallet.lnworker.channels and not self.wallet.lnworker.channel_backups:
-            warning = _(messages.MSG_LIGHTNING_WARNING)
-            d = Question(_('Do you want to create your first channel?') +
-                         '\n\n' + warning, self.open_channel_dialog_with_warning)
-            d.open()
-        else:
-            d = LightningOpenChannelDialog(self)
-            d.open()
+#    def lightning_open_channel_dialog(self):
+ #       if not self.wallet.has_lightning():
+  #          self.show_error(_('Lightning is not enabled for this wallet'))
+   #         return
+    #    if not self.wallet.lnworker.channels and not self.wallet.lnworker.channel_backups:
+     #       warning = _(messages.MSG_LIGHTNING_WARNING)
+      #      d = Question(_('Do you want to create your first channel?') +
+       #                  '\n\n' + warning, self.open_channel_dialog_with_warning)
+        #    d.open()
+    #    else:
+     #       d = LightningOpenChannelDialog(self)
+      #      d.open()
 
     def swap_dialog(self):
         d = SwapDialog(self, self.electrum_config)

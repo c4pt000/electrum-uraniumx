@@ -200,8 +200,8 @@ class SendScreen(CScreen, Logger):
     def update(self):
         if self.app.wallet is None:
             return
-        _list = self.app.wallet.get_unpaid_invoices()
-        _list.reverse()
+      #  _list = self.app.wallet.get_unpaid_invoices()
+       # _list.reverse()
         payments_container = self.ids.payments_container
         payments_container.data = [self.get_card(invoice) for invoice in _list]
 
@@ -486,10 +486,10 @@ class ReceiveScreen(CScreen):
     def update(self):
         if self.app.wallet is None:
             return
-        _list = self.app.wallet.get_unpaid_requests()
-        _list.reverse()
+#        _list = self.app.wallet.get_unpaid_requests()
+ #       _list.reverse()
         requests_container = self.ids.requests_container
-        requests_container.data = [self.get_card(item) for item in _list]
+#        requests_container.data = [self.get_card(item) for item in _list]
 
     def update_item(self, key, request):
         payments_container = self.ids.requests_container

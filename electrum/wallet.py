@@ -84,8 +84,8 @@ if TYPE_CHECKING:
     from .network import Network
 
 
-from .names import (get_default_name_tx_label, OP_NAME_NEW, OP_NAME_FIRSTUPDATE,
-                    OP_NAME_UPDATE)
+#from .names import (get_default_name_tx_label, OP_NAME_NEW, OP_NAME_FIRSTUPDATE,
+ #                   OP_NAME_UPDATE)
 
 _logger = get_logger(__name__)
 
@@ -988,9 +988,9 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
 
     def get_default_label(self, tx_hash) -> str:
         # TODO: what happens if a name would have a non-empty default non-name label?
-        name_label = get_default_name_tx_label(self, self.db.transactions.get(tx_hash))
-        if name_label is not None:
-            return name_label
+#        name_label = get_default_name_tx_label(self, self.db.transactions.get(tx_hash))
+ #       if name_label is not None:
+  #          return name_label
 
         if not self.db.get_txi_addresses(tx_hash):
             labels = []
