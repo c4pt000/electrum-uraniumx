@@ -146,8 +146,8 @@ class BaseWizard(Logger):
         wallet_kinds = [
             ('standard',  _("Standard wallet")),
 #            ('2fa', _("Wallet with two-factor authentication")),
-            ('multisig',  _("Multi-signature wallet (untested)")),
-            ('imported',  _("Import Radiocoin addresses or private keys")),
+         #   ('multisig',  _("Multi-signature wallet (untested)")),
+            ('imported',  _("Import UraniumX addresses or private keys")),
         ]
         choices = [pair for pair in wallet_kinds if pair[0] in wallet_types]
         self.choice_dialog(title=title, message=message, choices=choices, run_next=self.on_wallet_type)
