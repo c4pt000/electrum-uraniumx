@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight UraniumX client
+# Electrum - lightweight Radiocoin client
 # Copyright (C) 2015 Thomas Voegtlin
 #
 # Permission is hereby granted, free of charge, to any person
@@ -69,18 +69,27 @@ except:
 
 # note: this list needs to be kept in sync with another in kivy
 TX_ICONS = [
-    "unconfirmed.png",
-    "warning.png",
-    "offline_tx.png",
-    "offline_tx.png",
-    "clock1.png",
-    "clock2.png",
-    "clock3.png",
-    "clock4.png",
-    "clock5.png",
+#    "unconfirmed.png",
+ #   "warning.png",
+  #  "offline_tx.png",
+ #   "offline_tx.png",
+  #  "clock1.png",
+  #  "clock2.png",
+ #   "clock3.png",
+ #   "clock4.png",
+ #   "clock5.png",
+ #   "confirmed.png",
+
+    "confirmed.png",
+    "confirmed.png",
+    "confirmed.png",
+    "confirmed.png",
+    "confirmed.png",
+    "confirmed.png",
+    "confirmed.png",
+    "confirmed.png",
     "confirmed.png",
 ]
-
 
 ROLE_SORT_ORDER = Qt.UserRole + 1000
 
