@@ -2,7 +2,14 @@ for ElectrumX uraniumX (URX) server
 https://github.com/c4pt000/ElectrumX-server-UraniumX
 
 # for android
-# https://drive.google.com/file/d/1PAYzOAvAbVUrVRDWwXoTzFgxtHTHz5tS/view?usp=sharing
+
+# https://drive.google.com/file/d/17dGtNS9wUWsdpUlGDDxtkZ9W5H_yX_qW/view?usp=sharing
+<br>
+<br>
+<br>
+<br>
+
+https://drive.google.com/file/d/1PAYzOAvAbVUrVRDWwXoTzFgxtHTHz5tS/view?usp=sharing
 
 ```
 cd /usr/bin
