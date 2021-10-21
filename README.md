@@ -3,7 +3,8 @@ https://github.com/c4pt000/ElectrumX-server-UraniumX
 
 # for android
 
-# https://drive.google.com/file/d/17dGtNS9wUWsdpUlGDDxtkZ9W5H_yX_qW/view?usp=sharing
+* final 
+# https://drive.google.com/file/d/1d8EAmlyTPyU5REL_qXkXKM6l4oCzts3W/view?usp=sharing
 <br>
 <br>
 <br>
