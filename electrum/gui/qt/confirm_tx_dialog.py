@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight UraniumX client
+# Electrum - lightweight Radiocoin client
 # Copyright (2019) The Electrum Developers
 #
 # Permission is hereby granted, free of charge, to any person
@@ -68,15 +68,15 @@ class TxEditor:
             self.update()
             self.needs_update = False
 
-    def fee_slider_callback(self, dyn, pos, fee_rate):
-        if dyn:
-            if self.config.use_mempool_fees():
-                self.config.set_key('depth_level', pos, False)
-            else:
-                self.config.set_key('fee_level', pos, False)
-        else:
-            self.config.set_key('fee_per_kb', fee_rate, False)
-        self.needs_update = True
+   # def fee_slider_callback(self, dyn, pos, fee_rate):
+    #    if dyn:
+      #      if self.config.use_mempool_fees():
+       #         self.config.set_key('depth_level', pos, False)
+        #    else:
+         #       self.config.set_key('fee_level', pos, False)
+     #   else:
+      #      self.config.set_key('fee_per_kb', fee_rate, False)
+       # self.needs_update = True
 
     def get_fee_estimator(self):
         return None
@@ -144,7 +144,7 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
         grid.addWidget(HelpLabel(_("Amount to be sent") + ": ", msg), 0, 0)
         grid.addWidget(self.amount_label, 0, 1)
 
-        msg = _('UraniumX transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
+        msg = _('Radiocoin transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
               + _('The amount of fee can be decided freely by the sender. However, transactions with low fees take more time to be processed.') + '\n\n'\
               + _('A suggested fee is automatically added to this field. You may override it. The suggested fee increases with the size of the transaction.')
         self.fee_label = QLabel('')
@@ -160,11 +160,11 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
         grid.addWidget(self.extra_fee_label, 2, 0)
         grid.addWidget(self.extra_fee_value, 2, 1)
 
-        self.fee_slider = FeeSlider(self, self.config, self.fee_slider_callback)
-        self.fee_combo = FeeComboBox(self.fee_slider)
-        grid.addWidget(HelpLabel(_("Fee rate") + ": ", self.fee_combo.help_msg), 5, 0)
-        grid.addWidget(self.fee_slider, 5, 1)
-        grid.addWidget(self.fee_combo, 5, 2)
+#        self.fee_slider = FeeSlider(self, self.config, self.fee_slider_callback)
+ #       self.fee_combo = FeeComboBox(self.fee_slider)
+#        grid.addWidget(HelpLabel(_("Fee rate") + ": ", self.fee_combo.help_msg), 5, 0)
+ #       grid.addWidget(self.fee_slider, 5, 1)
+  #      grid.addWidget(self.fee_combo, 5, 2)
 
         self.message_label = QLabel(self.default_message())
         self.message_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
