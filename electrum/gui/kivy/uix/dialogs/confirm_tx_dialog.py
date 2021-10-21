@@ -177,6 +177,6 @@ class ConfirmTxDialog(FeeSliderDialog, Factory.Popup):
         self.update_text()
         Clock.schedule_once(lambda dt: self.update_tx())
 
-    def update_text(self):
-        target, tooltip, dyn = self.config.get_fee_target()
-        self.ids.fee_button.text = target
+ #   def update_text(self):
+#        target, tooltip, dyn = self.config.get_fee_target()
+#        self.ids.fee_button.text = target
