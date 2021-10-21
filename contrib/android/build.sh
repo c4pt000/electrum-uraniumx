@@ -51,7 +51,7 @@ fi
 
 info "building binary..."
 mkdir --parents "$PROJECT_ROOT_OR_FRESHCLONE_ROOT"/.buildozer/.gradle
-sudo docker run -it --rm \
+sudo docker run -d -it --rm \
     --name electrum-android-builder-cont \
     -v "$PROJECT_ROOT_OR_FRESHCLONE_ROOT":/home/user/wspace/electrum \
     -v "$PROJECT_ROOT_OR_FRESHCLONE_ROOT"/.buildozer/.gradle:/home/user/.gradle \

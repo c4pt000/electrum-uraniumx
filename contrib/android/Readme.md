@@ -72,11 +72,11 @@ $ adb shell monkey -p org.electrum.electrum 1
 
 ### How do I get an interactive shell inside docker?
 ```
-$ sudo docker run -d -it --rm \
+$ sudo docker run -it --rm \
     -v $PWD:/home/user/wspace/electrum \
     -v $PWD/.buildozer/.gradle:/home/user/.gradle \
     --workdir /home/user/wspace/electrum \
-    c4pt/electrum-altcoin-builder
+    electrum-android-builder-img
 ```
 
 
