@@ -6,7 +6,7 @@ docker run -it -d --rm \
     -v $PWD/.buildozer/.gradle:/home/user/.gradle \
     --workdir /home/user/wspace/electrum \
     electrum-android-builder-img
-echo "docker exec -it <docker_vm_hash> bash"
+echo "^^^^ first 4 or 5 numbers or letters of this hash as docker_vm_hash ->   docker exec -it <docker_vm_hash> bash"
 echo "sudo -i"
 echo "pip install cython buildozer kivy"
 echo "cd /home/user/wspace/electrum"
