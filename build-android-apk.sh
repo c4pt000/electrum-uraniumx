@@ -1,6 +1,6 @@
 cd contrib/android
 docker build -t electrum-android-builder-img .
-
+cd ../../
 docker run -it -d --rm \
     -v $PWD:/home/user/wspace/electrum \
     -v $PWD/.buildozer/.gradle:/home/user/.gradle \
