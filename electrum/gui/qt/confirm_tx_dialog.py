@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Radiocoin client
+# Electrum - lightweight UraniumX client
 # Copyright (2019) The Electrum Developers
 #
 # Permission is hereby granted, free of charge, to any person
@@ -144,7 +144,7 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
         grid.addWidget(HelpLabel(_("Amount to be sent") + ": ", msg), 0, 0)
         grid.addWidget(self.amount_label, 0, 1)
 
-        msg = _('Radiocoin transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
+        msg = _('UraniumX transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
               + _('The amount of fee can be decided freely by the sender. However, transactions with low fees take more time to be processed.') + '\n\n'\
               + _('A suggested fee is automatically added to this field. You may override it. The suggested fee increases with the size of the transaction.')
         self.fee_label = QLabel('')
@@ -175,9 +175,9 @@ class ConfirmTxDialog(TxEditor, WindowModalDialog):
         self.pw.setVisible(self.password_required)
         grid.addWidget(self.pw_label, 8, 0)
         grid.addWidget(self.pw, 8, 1, 1, -1)
-        self.preview_button = QPushButton(_('Advanced'))
-        self.preview_button.clicked.connect(self.on_preview)
-        grid.addWidget(self.preview_button, 0, 2)
+      #  self.preview_button = QPushButton(_('Advanced'))
+       # self.preview_button.clicked.connect(self.on_preview)
+       # grid.addWidget(self.preview_button, 0, 2)
         self.send_button = QPushButton(_('Send'))
         self.send_button.clicked.connect(self.on_send)
         self.send_button.setDefault(True)

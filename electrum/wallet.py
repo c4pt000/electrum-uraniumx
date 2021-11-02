@@ -93,7 +93,7 @@ _logger = get_logger(__name__)
 TX_STATUS = [
     _('Unconfirmed'),
     _('Unconfirmed parent'),
-    _('Not Verified'),
+    _('paid'),
     _('Local'),
 ]
 
@@ -1193,7 +1193,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
             if fee is not None:
                 size = tx.estimated_size()
                 fee_per_byte = fee / size
-                extra.append(format_fee_satoshis(fee_per_byte) + ' sat/b')
+                extra.append(format_fee_satoshis(fee_per_byte) + ' geigers/b')
             if fee is not None and height in (TX_HEIGHT_UNCONF_PARENT, TX_HEIGHT_UNCONFIRMED) \
                and self.config.has_fee_mempool():
                 exp_n = self.config.fee_to_depth(fee_per_byte)
@@ -1557,7 +1557,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
             strategies: Sequence[BumpFeeStrategy] = None,
     ) -> PartialTransaction:
         """Increase the miner fee of 'tx'.
-        'new_fee_rate' is the target min rate in sat/vbyte
+        'new_fee_rate' is the target min rate in geigers/vbyte
         'coins' is a list of UTXOs we can choose from as potential new inputs to be added
         """
         txid = txid or tx.txid()
@@ -1830,7 +1830,7 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
     ) -> PartialTransaction:
         """Double-Spend-Cancel: cancel an unconfirmed tx by double-spending
         its inputs, paying ourselves.
-        'new_fee_rate' is the target min rate in sat/vbyte
+        'new_fee_rate' is the target min rate in geigers/vbyte
         """
         if not isinstance(tx, PartialTransaction):
             tx = PartialTransaction.from_tx(tx)
@@ -2613,16 +2613,19 @@ class Abstract_Wallet(AddressSynchronizer, ABC):
                     + _("Try to raise your transaction fee, or use a server with a lower relay fee."))
             short_warning = _("below relay fee") + "!"
             allow_send = False
+# high fee warning here mod
         elif fee_ratio >= FEE_RATIO_HIGH_WARNING:
             long_warning = (
-                    _('Warning') + ': ' + _("The fee for this transaction seems unusually high.")
-                    + f' ({fee_ratio*100:.2f}% of amount)')
-            short_warning = _("high fee ratio") + "!"
+                    _('') + '' + _("")
+#                    + f' ({fee_ratio*100:.2f}% of amount)')
+                    + f'')
+            short_warning = _("") + ""
         elif feerate > FEERATE_WARNING_HIGH_FEE / 1000:
             long_warning = (
-                    _('Warning') + ': ' + _("The fee for this transaction seems unusually high.")
-                    + f' (feerate: {feerate:.2f} sat/byte)')
-            short_warning = _("high fee rate") + "!"
+                    _('') + '' + _("")
+#                    + f' (feerate: {feerate:.2f} geigers/byte)')
+                    + f'')
+            short_warning = _("") + ""
         if long_warning is None:
             return None
         else:

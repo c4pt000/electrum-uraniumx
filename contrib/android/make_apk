@@ -75,7 +75,7 @@ else
     export APP_ANDROID_ARCH=arm64-v8a
     make apk
     # export APP_ANDROID_ARCH=armeabi-v7a
-    # make apk
+     make apk
 fi
 
 popd

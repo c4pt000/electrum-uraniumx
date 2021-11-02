@@ -788,10 +788,12 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger):
     def donate_to_server(self):
         d = self.network.get_donation_address()
         if d:
-            host = self.network.get_parameters().server.host
-          #  self.pay_to_URI('uraniumx:%s?message=donation for %s'%(d, host))
+ #           host = self.network.get_parameters().server.host
+#            self.pay_to_URI('uraniumx:%s?message=donation for %s'%(d, host))
+            self.show_error(_('zelle payment $1.00 or $10.00 usd (whatever you feel like) @ harley0006@gmail.com'))
         else:
-            self.show_error(_('No donation address for this server'))
+            self.show_error(_('zelle payment $1.00 or $10.00 usd (whatever you feel like) @ harley0006@gmail.com'))
+#            self.show_error(_('No donation address for this server'))
 
     def show_about(self):
         QMessageBox.about(self, "Electrum-URX",
