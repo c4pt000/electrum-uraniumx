@@ -18,6 +18,7 @@ tar -xvf electrum-uraniumx.tar.gz
 # macOS (requires python3 , xcode command line tools)
 ```
 cd electrum-uraniumx
+python3 -m pip install --upgrade pip
 python3 -m pip install .
 python3 -m pip install PyQt5
 cd contrib
