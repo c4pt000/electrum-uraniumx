@@ -13,3 +13,15 @@ tar -xvf electrum-uraniumx.tar.gz
 ![s1](https://raw.githubusercontent.com/c4pt000/electrum-uraniumx/main/payto.png)
 ![s1](https://raw.githubusercontent.com/c4pt000/electrum-uraniumx/main/paytoconfirm.png)
 ![s1](https://raw.githubusercontent.com/c4pt000/electrum-uraniumx/main/paytoconfirm-sent.png)
+
+
+# macOS (requires python3 , xcode command line tools)
+```
+cd electrum-uraniumx
+python3 -m pip install .
+python3 -m pip install PyQt5
+cd contrib
+sh build-macos-automake.sh
+cd ..
+./run_electrum
+```
