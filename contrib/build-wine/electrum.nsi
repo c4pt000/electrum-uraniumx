@@ -7,6 +7,7 @@
 ;Variables
 
   !define PRODUCT_NAME "Electrum-URX"
+  !define PRODUCT_VERSION "win10"
   !define PRODUCT_WEB_SITE "https://github.com/c4pt000/electrum-uraniumx"
   !define PRODUCT_PUBLISHER "Electrum Technologies GmbH"
   !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
