@@ -1,8 +1,10 @@
 for ElectrumX uraniumX (URX) server
 https://github.com/c4pt000/ElectrumX-server-UraniumX
 
-# for android
-# https://drive.google.com/file/d/1y_VKQ3VZ9mXjyMd5ORvx6Xx8WReyRIMi/view?usp=sharing
+# for androi
+# https://drive.google.com/file/d/1WByxyLy0Y4ygmjHLlqBtHQubZLyQa1mr/view?usp=sharing
+
+
 ```
 cd /usr/bin
 wget https://github.com/c4pt000/electrum-uraniumx/releases/download/electrum-uraniumx/electrum-uraniumx.tar.gz
