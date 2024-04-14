@@ -14,12 +14,9 @@ see [issue #5159](https://github.com/spesmilo/electrum/issues/5159).
 
 1. Install Docker
 
-    ```
-    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    $ sudo apt-get update
-    $ sudo apt-get install -y docker-ce
-    ```
+    See [`contrib/docker_notes.md`](../../docker_notes.md).
+
+    (worth reading even if you already have docker)
 
 2. Build binary
 
@@ -28,7 +25,7 @@ see [issue #5159](https://github.com/spesmilo/electrum/issues/5159).
     ```
     If you want reproducibility, try instead e.g.:
     ```
-    $ ELECBUILD_COMMIT=HEAD ELECBUILD_NOCACHE=1 ./build.sh
+    $ ELECBUILD_COMMIT=HEAD ./build.sh
     ```
 
 3. The generated binary is in `./dist`.

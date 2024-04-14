@@ -531,7 +531,7 @@ class BaseWizard(Logger):
                 root_seed = seed.decrypt(passphrase)
                 self.on_restore_bip43(root_seed)
             self.passphrase_dialog(run_next=f, is_restoring=True) if is_ext else f('')
-        elif self.seed_type in ['standard', 'segwit']:
+        elif self.seed_type in ['standard']:
             f = lambda passphrase: self.run('create_keystore', seed, passphrase)
             self.passphrase_dialog(run_next=f, is_restoring=True) if is_ext else f('')
         elif self.seed_type == 'old':
@@ -541,7 +541,6 @@ class BaseWizard(Logger):
             self.run('on_restore_seed', seed, is_ext)
         else:
             raise Exception('Unknown seed type', self.seed_type)
-
 
     def on_restore_bip43(self, root_seed):
         def f(derivation, script_type):

@@ -797,7 +797,7 @@ def time_difference(distance_in_time, include_seconds):
         return "over %d years" % (round(distance_in_minutes / 525600))
 
 mainnet_block_explorers = {
-  'explorer.uraniumx.org': ('https://explorer.uraniumx.org/',
+  '194.163.178.204': ('http://194.163.178.204/',
                         {'tx': 'tx/', 'addr': 'address/'}),
 }
 

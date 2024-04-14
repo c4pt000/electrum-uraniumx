@@ -43,7 +43,7 @@ MSG_HW_STORAGE_ENCRYPTION = _("Set wallet file encryption.") + '\n'\
                           + _("Your wallet file does not contain secrets, mostly just metadata. ") \
                           + _("It also contains your master public key that allows watching your addresses.") + '\n\n'\
                           + _("Note: If you enable this setting, you will need your hardware device to open your wallet.")
-WIF_HELP_TEXT = (_('WIF keys are typed in Electrum, based on script type.') + '\n\n' +
+WIF_HELP_TEXT = (_('WIF keys are typed in Electrum-BIT, based on script type.') + '\n\n' +
                  _('A few examples') + ':\n' +
                  'p2pkh:KxZcY47uGp9a...       \t-> 1DckmggQM...\n' +
                  'p2wpkh-p2sh:KxZcY47uGp9a... \t-> 3NhNeZQXF...\n' +
@@ -53,7 +53,7 @@ MSG_PASSPHRASE_WARN_ISSUE4566 = _("Warning") + ": "\
                               + _("You have multiple consecutive whitespaces or leading/trailing "
                                   "whitespaces in your passphrase.") + " " \
                               + _("This is discouraged.") + " " \
-                              + _("Due to a bug, old versions of Electrum will NOT be creating the "
+                              + _("Due to a bug, old versions of Electrum-BIT will NOT be creating the "
                                   "same wallet as newer versions or other software.")
 
 
@@ -152,7 +152,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
     def __init__(self, config: 'SimpleConfig', app: QApplication, plugins: 'Plugins', *, gui_object: 'ElectrumGui'):
         QDialog.__init__(self, None)
         BaseWizard.__init__(self, config, plugins)
-        self.setWindowTitle('Electrum  -  ' + _('Install Wizard'))
+        self.setWindowTitle('Electrum-BIT  -  ' + _('Install Wizard'))
         self.app = app
         self.config = config
         self.gui_thread = gui_object.gui_thread
@@ -202,6 +202,8 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         self.refresh_gui()  # Need for QT on MacOSX.  Lame.
 
     def select_storage(self, path, get_wallet_from_daemon) -> Tuple[str, Optional[WalletStorage]]:
+        if os.path.isdir(path):
+            raise Exception("wallet path cannot point to a directory")
 
         vbox = QVBoxLayout()
         hbox = QHBoxLayout()
@@ -234,7 +236,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         vbox_create_new.setContentsMargins(0, 0, 0, 0)
         vbox.addWidget(widget_create_new)
 
-        self.set_layout(vbox, title=_('Electrum wallet'))
+        self.set_layout(vbox, title=_('Electrum-BIT wallet'))
 
         temp_storage = None  # type: Optional[WalletStorage]
         wallet_folder = os.path.dirname(path)
@@ -297,9 +299,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
 
         button.clicked.connect(on_choose)
         button_create_new.clicked.connect(
-            partial(
-                name_e.setText,
-                get_new_wallet_name(wallet_folder)))
+            lambda: name_e.setText(get_new_wallet_name(wallet_folder)))  # FIXME get_new_wallet_name might raise
         name_e.textChanged.connect(on_filename)
         name_e.setText(os.path.basename(path))
 
@@ -364,7 +364,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         path = storage.path
         if db.requires_split():
             self.hide()
-            msg = _("The wallet '{}' contains multiple accounts, which are no longer supported since Electrum 2.7.\n\n"
+            msg = _("The wallet '{}' contains multiple accounts, which are no longer supported since Electrum-BIT 2.7.\n\n"
                     "Do you want to split your wallet into multiple files?").format(path)
             if not self.question(msg):
                 return
@@ -479,13 +479,13 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         return self.text_input(title, header_layout, is_valid, allow_multi)
 
     @wizard_dialog
-#    def add_cosigner_dialog(self, run_next, index, is_valid):
- #       title = _("Add Cosigner") + " %d"%index
-  #      message = ' '.join([
-   #         _('Please enter the master public key (xpub) of your cosigner.'),
-    #        _('Enter their master private key (xprv) if you want to be able to sign for them.')
-     #   ])
-      #  return self.text_input(title, message, is_valid)
+    def add_cosigner_dialog(self, run_next, index, is_valid):
+        title = _("Add Cosigner") + " %d"%index
+        message = ' '.join([
+            _('Please enter the master public key (xpub) of your cosigner.'),
+            _('Enter their master private key (xprv) if you want to be able to sign for them.')
+        ])
+        return self.text_input(title, message, is_valid)
 
     @wizard_dialog
     def restore_seed_dialog(self, run_next, test):
@@ -730,10 +730,10 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         return None
 
     def init_network(self, network: 'Network'):
-        message = _("Electrum communicates with remote servers to get "
+        message = _("Electrum-BIT communicates with remote servers to get "
                   "information about your transactions and addresses. The "
                   "servers all fulfill the same purpose only differing in "
-                  "hardware. In most cases you simply want to let Electrum "
+                  "hardware. In most cases you simply want to let Electrum-BIT "
                   "pick one at random.  However if you prefer feel free to "
                   "select a server manually.")
         choices = [_("Auto connect"), _("Select server manually")]
@@ -751,48 +751,47 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
             network.auto_connect = True
             self.config.set_key('auto_connect', True, True)
 
-   # @wizard_dialog
-    
-  #  def multisig_dialog(self, run_next):
-   #     cw = CosignWidget(2, 2)
-    #    n_edit = QSlider(Qt.Horizontal, self)
-     #   m_edit = QSlider(Qt.Horizontal, self)
-      #  n_edit.setMinimum(2)
-   #     n_edit.setMaximum(15)
-    #    m_edit.setMinimum(1)
-#        m_edit.setMaximum(2)
-#        n_edit.setValue(2)
-#        m_edit.setValue(2)
-#        n_label = QLabel()
-#        m_label = QLabel()
-#        grid = QGridLayout()
-#        grid.addWidget(n_label, 0, 0)
-#        grid.addWidget(n_edit, 0, 1)
-#        grid.addWidget(m_label, 1, 0)
-#        grid.addWidget(m_edit, 1, 1)
-      #  def on_m(m):
-      #     m_label.setText(_('Require {0} signatures').format(m))
-      #      cw.set_m(m)
-      #      backup_warning_label.setVisible(cw.m != cw.n)
-      #  def on_n(n):
-      #      n_label.setText(_('From {0} cosigners').format(n))
-      #      cw.set_n(n)
-      #      m_edit.setMaximum(n)
-      #      backup_warning_label.setVisible(cw.m != cw.n)
-      #  n_edit.valueChanged.connect(on_n)
-      #  m_edit.valueChanged.connect(on_m)
-      #  vbox = QVBoxLayout()
-      #  vbox.addWidget(cw)
-      #  vbox.addWidget(WWLabel(_("Choose the number of signatures needed to unlock funds in your wallet:")))
-      #  vbox.addLayout(grid)
-      #  vbox.addSpacing(2 * char_width_in_lineedit())
-     #   backup_warning_label = WWLabel(_("Warning: to be able to restore a multisig wallet, "
-      #                                   "you should include the master public key for each cosigner "
-       #                                  "in all of your backups."))
-     #   vbox.addWidget(backup_warning_label)
-     #   on_n(2)
-     #   on_m(2)
-     #   self.exec_layout(vbox, _("Multi-Signature Wallet"))
-     #   m = int(m_edit.value())
-     #   n = int(n_edit.value())
-    #    return (m, n)
+    @wizard_dialog
+    def multisig_dialog(self, run_next):
+        cw = CosignWidget(2, 2)
+        n_edit = QSlider(Qt.Horizontal, self)
+        m_edit = QSlider(Qt.Horizontal, self)
+        n_edit.setMinimum(2)
+        n_edit.setMaximum(15)
+        m_edit.setMinimum(1)
+        m_edit.setMaximum(2)
+        n_edit.setValue(2)
+        m_edit.setValue(2)
+        n_label = QLabel()
+        m_label = QLabel()
+        grid = QGridLayout()
+        grid.addWidget(n_label, 0, 0)
+        grid.addWidget(n_edit, 0, 1)
+        grid.addWidget(m_label, 1, 0)
+        grid.addWidget(m_edit, 1, 1)
+        def on_m(m):
+            m_label.setText(_('Require {0} signatures').format(m))
+            cw.set_m(m)
+            backup_warning_label.setVisible(cw.m != cw.n)
+        def on_n(n):
+            n_label.setText(_('From {0} cosigners').format(n))
+            cw.set_n(n)
+            m_edit.setMaximum(n)
+            backup_warning_label.setVisible(cw.m != cw.n)
+        n_edit.valueChanged.connect(on_n)
+        m_edit.valueChanged.connect(on_m)
+        vbox = QVBoxLayout()
+        vbox.addWidget(cw)
+        vbox.addWidget(WWLabel(_("Choose the number of signatures needed to unlock funds in your wallet:")))
+        vbox.addLayout(grid)
+        vbox.addSpacing(2 * char_width_in_lineedit())
+        backup_warning_label = WWLabel(_("Warning: to be able to restore a multisig wallet, "
+                                         "you should include the master public key for each cosigner "
+                                         "in all of your backups."))
+        vbox.addWidget(backup_warning_label)
+        on_n(2)
+        on_m(2)
+        self.exec_layout(vbox, _("Multi-Signature Wallet"))
+        m = int(m_edit.value())
+        n = int(n_edit.value())
+        return (m, n)
