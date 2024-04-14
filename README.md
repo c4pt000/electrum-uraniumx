@@ -1,8 +1,6 @@
 for ElectrumX uraniumX (URX) server
 https://github.com/c4pt000/ElectrumX-server-UraniumX
 
-# for androi
-# https://drive.google.com/file/d/1WByxyLy0Y4ygmjHLlqBtHQubZLyQa1mr/view?usp=sharing
 
 
 ```
